@@ -1,43 +1,43 @@
-## About
-
-This project was created with [express-generator-typescript](https://github.com/seanpmaxwell/express-generator-typescript).
+# Ace of Spades: Backend
+This is the backend service powering Ace of Spades. 
+It is a RESTful API built with Express and TypeScript.
 
 
 ## Available Scripts
 
-### `npm run dev`
+### `yarn run dev`
 
 Run the server in development mode.
 
-### `npm test`
+### `yarn test`
 
 Run all unit-tests with hot-reloading.
 
-### `npm test -- --testFile="name of test file" (i.e. --testFile=Users).`
+### `yarn test -- --testFile="name of test file" (i.e. --testFile=Users).`
 
 Run a single unit-test.
 
-### `npm run test:no-reloading`
+### `yarn run test:no-reloading`
 
 Run all unit-tests without hot-reloading.
 
-### `npm run lint`
+### `yarn run lint`
 
 Check for linting errors.
 
-### `npm run build`
+### `yarn run build`
 
 Build the project for production.
 
-### `npm start`
+### `yarn start`
 
 Run the production build (Must be built first).
 
-### `npm start -- --env="name of env file" (default is production).`
+### `yarn start -- --env="name of env file" (default is production).`
 
 Run production build with a different env file.
 
 
 ## Additional Notes
 
-- If `npm run dev` gives you issues with bcrypt on MacOS you may need to run: `npm rebuild bcrypt --build-from-source`. 
+- If `yarn run dev` gives you issues with bcrypt on MacOS you may need to run: `yarn rebuild bcrypt --build-from-source`. 

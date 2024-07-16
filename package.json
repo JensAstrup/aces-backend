@@ -21,7 +21,7 @@
     "@aces": "dist"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=21"
   },
   "dependencies": {
     "@types/jest": "^29.5.12",

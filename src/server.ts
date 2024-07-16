@@ -21,10 +21,9 @@ const app = express()
 
 
 // **** Setup **** //
-
 // Basic middleware
 app.use(cors({
-  origin: '*',
+  origin: process.env.FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }))

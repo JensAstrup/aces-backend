@@ -8,7 +8,6 @@ import morgan from 'morgan'
 import 'express-async-errors'
 
 
-import EnvVars from '@aces/common/EnvVars'
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import { NodeEnvs } from '@aces/common/misc'
 import Paths from '@aces/common/Paths'
@@ -40,12 +39,12 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Show routes called in console during development
-if (EnvVars.NodeEnv === NodeEnvs.Dev.valueOf()) {
+if (process.env.NODE_EVN === NodeEnvs.Dev.valueOf()) {
   app.use(morgan('dev'))
 }
 
 // Security
-if (EnvVars.NodeEnv === NodeEnvs.Production.valueOf()) {
+if (process.env.NODE_ENV === NodeEnvs.Production.valueOf()) {
   app.use(helmet())
 }
 
@@ -60,7 +59,7 @@ app.use((
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction,
 ) => {
-  if (EnvVars.NodeEnv !== NodeEnvs.Test.valueOf()) {
+  if (process.env.NODE_ENV !== NodeEnvs.Test.valueOf()) {
     logger.err(err, true)
   }
   let status = HttpStatusCodes.BAD_REQUEST

@@ -2,24 +2,17 @@
  * Setup express server.
  */
 
-// eslint-disable-next-line import/order
-import cors from 'cors'
-import morgan from 'morgan'
-import 'express-async-errors'
 
+import cors from 'cors'
+import express, { NextFunction, Request, Response } from 'express'
+import 'express-async-errors'
+import helmet from 'helmet'
+import morgan from 'morgan'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import { NodeEnvs } from '@aces/common/misc'
-import Paths from '@aces/common/Paths'
-import RouteError from '@aces/common/RouteError'
+import RouteError from '@aces/errors/route-error'
 import BaseRouter from '@aces/routes'
-
-// eslint-disable-next-line import/order
-import express, { NextFunction, Request, Response } from 'express'
-// eslint-disable-next-line import/order
-import helmet from 'helmet'
-// eslint-disable-next-line import/order
-import logger from 'jet-logger'
 
 
 // **** Variables **** //
@@ -48,8 +41,7 @@ if (process.env.NODE_ENV === NodeEnvs.Production.valueOf()) {
   app.use(helmet())
 }
 
-// Add APIs, must be after middleware
-app.use(Paths.Base, BaseRouter)
+app.use('/', BaseRouter)
 
 // Add error handler
 app.use((
@@ -60,7 +52,7 @@ app.use((
   next: NextFunction,
 ) => {
   if (process.env.NODE_ENV !== NodeEnvs.Test.valueOf()) {
-    logger.err(err, true)
+    console.error(err, true)
   }
   let status = HttpStatusCodes.BAD_REQUEST
   if (err instanceof RouteError) {

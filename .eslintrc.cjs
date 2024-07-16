@@ -9,7 +9,6 @@ module.exports = {
   "extends": [
     ...baseConfig.extends,
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
-    "plugin:node/recommended"
   ],
   "parserOptions": {
     ...baseConfig.parserOptions,
@@ -20,17 +19,9 @@ module.exports = {
     "@typescript-eslint/explicit-member-accessibility": "warn",
     "@typescript-eslint/no-misused-promises": 0,
     "@typescript-eslint/no-floating-promises": 0,
-    "comma-dangle": ["warn", "always-multiline"],
-    "no-console": 1,
+    "no-console": 'off',
     "no-extra-boolean-cast": 0,
     "indent": ["warn", 2],
-    "node/no-process-env": 1,
-    "node/no-unsupported-features/es-syntax": [
-      "error",
-      { "ignores" : ["modules"] }
-    ],
-    "node/no-missing-import": 0,
-    "node/no-unpublished-import": 0,
     "import/order": [
       "error",
       {
@@ -60,9 +51,7 @@ module.exports = {
     ]
   },
   "settings": {
-    "node": {
-      "tryExtensions": [".js", ".json", ".node", ".ts"]
-    }
+
   },
   "overrides": [
     {

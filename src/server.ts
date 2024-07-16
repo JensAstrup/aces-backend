@@ -2,24 +2,17 @@
  * Setup express server.
  */
 
-// eslint-disable-next-line import/order
-import morgan from 'morgan'
+
+import cors from 'cors'
+import express, { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'
+import helmet from 'helmet'
+import morgan from 'morgan'
 
-
-import EnvVars from '@aces/common/EnvVars'
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import { NodeEnvs } from '@aces/common/misc'
-import Paths from '@aces/common/Paths'
-import RouteError from '@aces/common/RouteError'
+import RouteError from '@aces/errors/route-error'
 import BaseRouter from '@aces/routes'
-
-// eslint-disable-next-line import/order
-import express, { NextFunction, Request, Response } from 'express'
-// eslint-disable-next-line import/order
-import helmet from 'helmet'
-// eslint-disable-next-line import/order
-import logger from 'jet-logger'
 
 
 // **** Variables **** //
@@ -28,23 +21,26 @@ const app = express()
 
 
 // **** Setup **** //
-
 // Basic middleware
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Show routes called in console during development
-if (EnvVars.NodeEnv === NodeEnvs.Dev.valueOf()) {
+if (process.env.NODE_EVN === NodeEnvs.Dev.valueOf()) {
   app.use(morgan('dev'))
 }
 
 // Security
-if (EnvVars.NodeEnv === NodeEnvs.Production.valueOf()) {
+if (process.env.NODE_ENV === NodeEnvs.Production.valueOf()) {
   app.use(helmet())
 }
 
-// Add APIs, must be after middleware
-app.use(Paths.Base, BaseRouter)
+app.use('/', BaseRouter)
 
 // Add error handler
 app.use((
@@ -54,8 +50,8 @@ app.use((
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction,
 ) => {
-  if (EnvVars.NodeEnv !== NodeEnvs.Test.valueOf()) {
-    logger.err(err, true)
+  if (process.env.NODE_ENV !== NodeEnvs.Test.valueOf()) {
+    console.error(err, true)
   }
   let status = HttpStatusCodes.BAD_REQUEST
   if (err instanceof RouteError) {

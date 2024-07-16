@@ -1,6 +1,6 @@
 import * as CryptoJS from 'crypto-js'
 
-import ConfigurationError from '@aces/errors/configuration'
+import ConfigurationError from '@aces/errors/configuration-error'
 
 
 const KEY = process.env.ENCRYPTION_KEY

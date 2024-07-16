@@ -1,6 +1,6 @@
 import { AES } from 'crypto-js'
 
-import ConfigurationError from '@aces/errors/configuration'
+import ConfigurationError from '@aces/errors/configuration-error'
 import encrypt from '@aces/util/encryption/encrypt'
 
 

@@ -17,7 +17,7 @@ async function authorize(request: IncomingAccessTokenRequest, response: Response
     console.log('request.body.code', request.body.code)
     const accessToken = await exchangeCode(request.body.code)
     const user = await getOrCreateUser(accessToken)
-    response.status(HttpStatusCodes.OK).json({ token: user.token })
+    response.status(HttpStatusCodes.OK).json({ accessToken: user.token })
   }
   catch (e) {
     console.error(e.response.data)

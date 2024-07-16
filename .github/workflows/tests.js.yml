@@ -19,11 +19,15 @@ jobs:
         with:
           node-version: 21.x
       - run: yarn install --frozen-lockfile
+
       - name: Generate Prisma Client
         run: npx prisma generate --schema ./src/prisma/schema.prisma
-      - run: yarn test:coverage
+
+      - name: Run tests
+        run: yarn test:coverage
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          slug: JensAstrup/shortcut-assistant-backend
+          slug: JensAstrup/aces-backend

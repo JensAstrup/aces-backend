@@ -2,13 +2,15 @@
   "name": "aces-backend",
   "version": "1.0.0-alpha.0",
   "scripts": {
-    "build": "npx ts-node build.ts",
+    "build": "yarn run generate && npx ts-node build.ts",
     "lint": "npx eslint --ext .ts src/",
     "lint:tests": "npx eslint --ext .ts tests/",
     "start": "node -r module-alias/register ./dist --env=production",
     "dev": "dotenvx run -f ./env/development.env -- nodemon",
     "test": "jest --env-file=./env/test.env",
-    "test:coverage": "node --env-file ./env/test.env node_modules/.bin/jest --coverage --coverageDirectory=coverage"
+    "test:coverage": "node --env-file ./env/test.env node_modules/.bin/jest --coverage --coverageDirectory=coverage",
+    "migrate:dev": "prisma migrate dev --name init --schema ./src/prisma/schema.prisma",
+    "generate": "prisma generate --schema ./src/prisma/schema.prisma"
   },
   "nodemonConfig": {
     "watch": [

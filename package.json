@@ -8,7 +8,7 @@
     "start": "node -r module-alias/register ./dist --env=production",
     "dev": "nodemon",
     "test": "jest --env-file=./env/test.env",
-    "test:coverage": "node --env-file ./env/.env.test node_modules/.bin/jest --coverage --coverageDirectory=coverage"
+    "test:coverage": "node --env-file ./env/test.env node_modules/.bin/jest --coverage --coverageDirectory=coverage"
   },
   "nodemonConfig": {
     "watch": [

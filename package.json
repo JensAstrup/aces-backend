@@ -5,7 +5,7 @@
     "build": "yarn run generate && npx ts-node build.ts",
     "lint": "npx eslint --ext .ts src/",
     "lint:tests": "npx eslint --ext .ts tests/",
-    "start": "node -r module-alias/register ./dist --env=production",
+    "start": "npm run migrate:dev && node -r module-alias/register ./dist --env=production",
     "dev": "dotenvx run -f ./env/development.env -- nodemon",
     "test": "jest --env-file=./env/test.env",
     "test:coverage": "node --env-file ./env/test.env node_modules/.bin/jest --coverage --coverageDirectory=coverage",

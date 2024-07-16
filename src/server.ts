@@ -3,6 +3,7 @@
  */
 
 // eslint-disable-next-line import/order
+import cors from 'cors'
 import morgan from 'morgan'
 import 'express-async-errors'
 
@@ -30,6 +31,11 @@ const app = express()
 // **** Setup **** //
 
 // Basic middleware
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 

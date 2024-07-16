@@ -19,7 +19,6 @@ module.exports = {
     "@typescript-eslint/explicit-member-accessibility": "warn",
     "@typescript-eslint/no-misused-promises": 0,
     "@typescript-eslint/no-floating-promises": 0,
-    "comma-dangle": ["warn", "always-multiline"],
     "no-console": 'off',
     "no-extra-boolean-cast": 0,
     "indent": ["warn", 2],

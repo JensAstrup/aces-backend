@@ -14,13 +14,13 @@ interface IncomingAccessTokenRequest extends Request {
 
 async function authorize(request: IncomingAccessTokenRequest, response: Response): Promise<void> {
   try {
-    console.log('request.body.code', request.body.code)
     const accessToken = await exchangeCode(request.body.code)
     const user = await getOrCreateUser(accessToken)
     response.status(HttpStatusCodes.OK).json({ accessToken: user.token })
   }
   catch (e) {
-    console.error(e.response.data)
+    console.error(e)
+    console.error(e.response?.data)
     response.status(HttpStatusCodes.INTERNAL_SERVER_ERROR).json({ error: 'An error occurred' })
   }
 }

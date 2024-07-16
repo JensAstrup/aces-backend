@@ -1,0 +1,21 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/app
+    env_file:
+      - env/development.env
+    depends_on:
+      - db
+    links:
+      - db
+    command: yarn dev
+
+  db:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust

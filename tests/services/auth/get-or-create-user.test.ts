@@ -29,7 +29,8 @@ jest.mock('@prisma/client', () => {
           })
         }
       }
-    })
+    }),
+    User: {}
   }
 })
 

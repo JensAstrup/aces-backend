@@ -16,21 +16,21 @@ const mockEncrypt = encrypt as jest.Mock
 
 // Mock PrismaClient
 jest.mock('@prisma/client', () => {
+  const mockPrismaClient = {
+    user: {
+      upsert: jest.fn().mockResolvedValue({
+        id: '123456',
+        linearId: 'linear-123456',
+        email: 'test@email.com',
+        displayName: 'Test User',
+        token: 'abcdef'
+      })
+    }
+  }
+
   return {
-    PrismaClient: jest.fn().mockImplementation(() => {
-      return {
-        user: {
-          upsert: jest.fn().mockResolvedValue({
-            id: '123456',
-            linearId: 'linear-123456',
-            email: 'test@email.com',
-            displayName: 'Test User',
-            token: 'abcdef'
-          })
-        }
-      }
-    }),
-    User: {}
+    PrismaClient: jest.fn().mockImplementation(() => mockPrismaClient),
+    User: jest.fn() // Mocking the User type
   }
 })
 

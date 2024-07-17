@@ -3,6 +3,8 @@
  */
 
 
+import setUser from '@aces/middleware/set-user'
+
 import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'
@@ -29,6 +31,7 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(setUser)
 
 // Show routes called in console during development
 if (process.env.NODE_EVN === NodeEnvs.Dev.valueOf()) {

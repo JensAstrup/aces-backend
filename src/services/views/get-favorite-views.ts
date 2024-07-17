@@ -1,10 +1,10 @@
-import { LinearClient } from '@linear/sdk'
+import { CustomView, LinearClient } from '@linear/sdk'
 import { User } from '@prisma/client'
 
 import decrypt from '@aces/util/encryption/decrypt'
 
 
-async function getFavoriteViews(user: User) {
+async function getFavoriteViews(user: User): Promise<CustomView[]> {
   const accessToken = decrypt(user.token)
   const linear = new LinearClient({ accessToken })
   // Using linear SDK, retrieve a user's favorite views

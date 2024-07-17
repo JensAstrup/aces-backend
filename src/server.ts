@@ -3,7 +3,6 @@
  */
 
 
-import setUser from '@aces/middleware/set-user'
 
 import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
@@ -14,6 +13,7 @@ import morgan from 'morgan'
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import { NodeEnvs } from '@aces/common/misc'
 import RouteError from '@aces/errors/route-error'
+import setUser from '@aces/middleware/set-user'
 import BaseRouter from '@aces/routes'
 
 

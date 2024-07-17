@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 
+import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import getFavoriteViews from '@aces/services/views/get-favorite-views'
 
 
@@ -8,10 +9,10 @@ interface View {
     name: string
 }
 
-async function getViews(request: Request, response: Response) {
+async function getViews(request: Request, response: Response): Promise<void> {
   const user = request.user
   if (!user) {
-    response.status(401).send('Unauthorized')
+    response.status(HttpStatusCodes.UNAUTHORIZED).send('Unauthorized')
     return
   }
   const favoriteViews = await getFavoriteViews(user)

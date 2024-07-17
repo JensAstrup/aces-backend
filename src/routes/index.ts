@@ -5,7 +5,6 @@ import getIssues from '@aces/handlers/views/get-view-issues'
 import getViews from '@aces/handlers/views/get-views'
 
 
-
 const router = Router()
 router.post('/auth', authorize)
 router.get('/views', getViews)

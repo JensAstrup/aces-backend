@@ -4,7 +4,6 @@ import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import getViewIssues from '@aces/services/views/get-view-issues'
 
 
-
 async function getIssues(request: Request, response: Response): Promise<void> {
   const user = request.user
   if (!user) {

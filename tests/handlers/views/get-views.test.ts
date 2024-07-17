@@ -20,7 +20,7 @@ describe('getViews', () => {
       json: jest.fn()
     } as unknown as Response
     mockGetFavoriteViews.mockResolvedValue([{ id: '1', name: 'Issue' } as CustomView])
-    const result = await getViews(req, res)
+    await getViews(req, res)
     expect(mockGetFavoriteViews).toHaveBeenCalledWith(user)
     expect(res.json).toHaveBeenCalledWith([{ id: '1', name: 'Issue' }])
   })

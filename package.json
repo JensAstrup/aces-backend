@@ -3,7 +3,7 @@
   "version": "1.0.0-alpha.1",
   "scripts": {
     "build": "yarn run generate && npx ts-node build.ts",
-    "lint": "npx eslint --ext .ts src/",
+    "lint": "npx eslint --ext .ts src/ tests/",
     "lint:tests": "npx eslint --ext .ts tests/",
     "start": "npm run migrate:dev && node -r module-alias/register ./dist --env=production",
     "dev": "dotenvx run -f ./env/development.env -- nodemon",

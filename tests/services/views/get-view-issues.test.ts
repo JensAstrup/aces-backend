@@ -23,6 +23,23 @@ jest.mock('@linear/sdk', () => {
                       name: 'name',
                       type: 'type'
                     },
+                    comments: {
+                      nodes: [
+                        {
+                          id: '123',
+                          createdAt: 'createdAt',
+                          body: 'body',
+                          user: {
+                            id: '123',
+                            name: 'name',
+                            avatarUrl: 'avatarUrl',
+                          },
+                          botActor: {
+                            id: '123'
+                          }
+                        }
+                      ]
+                    },
                     url: 'url'
                   }
                 ]
@@ -51,6 +68,23 @@ describe('getViewIssues', () => {
         state: {
           name: 'name',
           type: 'type'
+        },
+        comments: {
+          nodes: [
+            {
+              id: '123',
+              body: 'body',
+              createdAt: 'createdAt',
+              user: {
+                id: '123',
+                name: 'name',
+                avatarUrl: 'avatarUrl'
+              },
+              botActor: {
+                id: '123'
+              }
+            }
+          ]
         },
         url: 'url'
       }

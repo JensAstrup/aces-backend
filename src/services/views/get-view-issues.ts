@@ -17,6 +17,7 @@ async function getViewIssues(viewId: string, accessToken: string): Promise<Issue
           title
           description
           url
+          createdAt
           state {
             name
             type
@@ -25,9 +26,14 @@ async function getViewIssues(viewId: string, accessToken: string): Promise<Issue
                 nodes {
                     id
                     body
+                    createdAt
                     user {
                       id
                       name
+                      avatarUrl
+                    }
+                    botActor {
+                        id
                     }
                 }
             }

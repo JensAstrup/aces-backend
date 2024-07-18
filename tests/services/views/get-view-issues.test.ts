@@ -27,10 +27,15 @@ jest.mock('@linear/sdk', () => {
                       nodes: [
                         {
                           id: '123',
+                          createdAt: 'createdAt',
                           body: 'body',
                           user: {
                             id: '123',
-                            name: 'name'
+                            name: 'name',
+                            avatarUrl: 'avatarUrl',
+                          },
+                          botActor: {
+                            id: '123'
                           }
                         }
                       ]
@@ -69,9 +74,14 @@ describe('getViewIssues', () => {
             {
               id: '123',
               body: 'body',
+              createdAt: 'createdAt',
               user: {
                 id: '123',
-                name: 'name'
+                name: 'name',
+                avatarUrl: 'avatarUrl'
+              },
+              botActor: {
+                id: '123'
               }
             }
           ]

@@ -11,17 +11,24 @@ jest.mock('@linear/sdk', () => {
     LinearClient: jest.fn().mockReturnValue({
       client: {
         rawRequest: jest.fn().mockResolvedValue({
-          data: [
-            {
-              id: '123',
-              title: 'title',
-              description: 'description',
-              state: {
-                name: 'name',
-                type: 'type'
+          data: {
+            customView: {
+              issues: {
+                nodes: [
+                  {
+                    id: '123',
+                    title: 'title',
+                    description: 'description',
+                    state: {
+                      name: 'name',
+                      type: 'type'
+                    },
+                    url: 'url'
+                  }
+                ]
               }
             }
-          ]
+          }
         })
       }
     })
@@ -44,7 +51,8 @@ describe('getViewIssues', () => {
         state: {
           name: 'name',
           type: 'type'
-        }
+        },
+        url: 'url'
       }
     ])
   })

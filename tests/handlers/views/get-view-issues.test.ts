@@ -43,7 +43,8 @@ describe('getIssues', () => {
         state: {
           name: 'name',
           type: 'type'
-        }
+        },
+        url: 'url'
       }
     ]
     mockGetViewIssues.mockResolvedValue(issues)

@@ -1,9 +1,3 @@
-/**
- * Setup express server.
- */
-
-
-
 import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'

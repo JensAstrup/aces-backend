@@ -1,4 +1,4 @@
-import { Issue, LinearClient } from '@linear/sdk'
+import { CustomViewQuery, Issue, LinearClient, LinearRawResponse } from '@linear/sdk'
 
 import decrypt from '@aces/util/encryption/decrypt'
 
@@ -20,6 +20,7 @@ async function getViewIssues(viewId: string, accessToken: string): Promise<Issue
             name
             type
             }
+            url
           }
         }
       }
@@ -29,8 +30,9 @@ async function getViewIssues(viewId: string, accessToken: string): Promise<Issue
       null: true
     }
   }
-  const issueConnection = await graphQlClient.rawRequest(query, { viewId, filter })
-  return issueConnection.data as Issue[]
+  const issueConnection: LinearRawResponse<CustomViewQuery> = await graphQlClient.rawRequest(query, { viewId, filter })
+  // @ts-expect-error customView does exist
+  return issueConnection.data?.customView.issues?.nodes
 }
 
 export default getViewIssues

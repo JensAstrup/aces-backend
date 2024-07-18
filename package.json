@@ -9,7 +9,7 @@
     "dev": "dotenvx run -f ./env/development.env -- nodemon",
     "test": "jest --env-file=./env/test.env",
     "test:coverage": "node --env-file ./env/test.env node_modules/.bin/jest --coverage --coverageDirectory=coverage",
-    "migrate:dev": "prisma migrate dev --name init --schema ./src/prisma/schema.prisma",
+    "migrate:dev": "prisma migrate dev --schema ./src/prisma/schema.prisma",
     "generate": "prisma generate --schema ./src/prisma/schema.prisma"
   },
   "nodemonConfig": {

@@ -10,7 +10,7 @@ import fs from 'fs-extra'
 /**
  * Start
  */
-(async () => {
+(async (): Promise<void> => {
   try {
     // Remove current build
     await remove('./dist/')

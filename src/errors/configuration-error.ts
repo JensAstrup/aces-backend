@@ -1,5 +1,5 @@
 class ConfigurationError extends Error {
-  constructor(message: string) {
+  public constructor(message: string) {
     super(message)
     this.name = 'ConfigurationError'
   }

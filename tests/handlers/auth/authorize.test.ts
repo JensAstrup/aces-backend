@@ -1,6 +1,6 @@
 import { Response } from 'express'
 
-import authorize, { IncomingAccessTokenRequest } from '@aces/services/auth/authorize'
+import authorize, { IncomingAccessTokenRequest } from '@aces/handlers/auth/authorize'
 import getOrCreateUser from '@aces/services/auth/get-or-create-user'
 
 

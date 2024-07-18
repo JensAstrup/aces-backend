@@ -5,13 +5,12 @@
 import childProcess from 'child_process'
 
 import fs from 'fs-extra'
-import logger from 'jet-logger';
 
 
 /**
  * Start
  */
-(async () => {
+(async (): Promise<void> => {
   try {
     // Remove current build
     await remove('./dist/')
@@ -19,7 +18,7 @@ import logger from 'jet-logger';
     await exec('tsc --build tsconfig.prod.json', './')
   }
   catch (err) {
-    logger.err(err)
+    console.error(err)
     process.exit(1)
   }
 })()
@@ -35,16 +34,6 @@ function remove(loc: string): Promise<void> {
   })
 }
 
-/**
- * Copy file.
- */
-function copy(src: string, dest: string): Promise<void> {
-  return new Promise((res, rej) => {
-    fs.copy(src, dest, (err) => {
-      !!err ? rej(err) : res()
-    })
-  })
-}
 
 /**
  * Do command line command.
@@ -53,10 +42,10 @@ function exec(cmd: string, loc: string): Promise<void> {
   return new Promise((res, rej) => {
     return childProcess.exec(cmd, { cwd: loc }, (err, stdout, stderr) => {
       if (!!stdout) {
-        logger.info(stdout)
+        console.info(stdout)
       }
       if (!!stderr) {
-        logger.warn(stderr)
+        console.warn(stderr)
       }
       !!err ? rej(err) : res()
     })

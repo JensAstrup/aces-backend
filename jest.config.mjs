@@ -13,7 +13,7 @@ const config = {
     '^@aces/(.*)$': '<rootDir>/src/$1'
   },
   roots: ['<rootDir>/src', '<rootDir>/tests'],
-  testMatch: ['**/?(*.)test.(js|ts)'],
+  testMatch: ['**/*.test.(js|ts)'],
   preset: 'ts-jest',
   // A map from regular expressions to paths to transformers
   transform: {

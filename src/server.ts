@@ -1,5 +1,3 @@
-import viewRouter from '@aces/routes/views'
-
 import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'
@@ -10,11 +8,12 @@ import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import { NodeEnvs } from '@aces/common/misc'
 import RouteError from '@aces/errors/route-error'
 import setUser from '@aces/middleware/set-user'
-import BaseRouter from '@aces/routes'
+import BaseRouter from '@aces/routes/auth'
+import roundsRouter from '@aces/routes/rounds'
+import viewRouter from '@aces/routes/views'
 
 
 // **** Variables **** //
-
 const app = express()
 
 
@@ -40,7 +39,9 @@ if (process.env.NODE_ENV === NodeEnvs.Production.valueOf()) {
 }
 
 app.use('/views', viewRouter)
+app.use('/rounds', roundsRouter)
 app.use('/', BaseRouter)
+
 
 // Add error handler
 app.use((

@@ -1,6 +1,7 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 
 import getIssues from '@aces/handlers/views/get-view-issues'
+import Request from '@aces/interfaces/request'
 import getViewIssues from '@aces/services/views/get-view-issues'
 
 

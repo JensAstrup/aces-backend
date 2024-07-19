@@ -1,3 +1,5 @@
+import viewRouter from '@aces/routes/views'
+
 import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'
@@ -37,6 +39,7 @@ if (process.env.NODE_ENV === NodeEnvs.Production.valueOf()) {
   app.use(helmet())
 }
 
+app.use('/views', viewRouter)
 app.use('/', BaseRouter)
 
 // Add error handler

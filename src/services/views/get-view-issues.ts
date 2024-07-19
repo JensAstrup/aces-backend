@@ -16,11 +16,27 @@ async function getViewIssues(viewId: string, accessToken: string): Promise<Issue
           id
           title
           description
+          url
+          createdAt
           state {
             name
             type
             }
-            url
+            comments {
+                nodes {
+                    id
+                    body
+                    createdAt
+                    user {
+                      id
+                      name
+                      avatarUrl
+                    }
+                    botActor {
+                        id
+                    }
+                }
+            }
           }
         }
       }

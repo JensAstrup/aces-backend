@@ -1,6 +1,7 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
+import Request from '@aces/interfaces/request'
 import getFavoriteViews from '@aces/services/views/get-favorite-views'
 
 

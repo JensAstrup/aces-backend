@@ -1,6 +1,7 @@
 import { User } from '@prisma/client'
-import { Request, Response } from 'express'
+import { Response } from 'express'
 
+import Request from '@aces/interfaces/request'
 import setUser from '@aces/middleware/set-user'
 import getOrCreateUser from '@aces/services/auth/get-or-create-user'
 

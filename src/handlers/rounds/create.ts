@@ -3,8 +3,8 @@ import { Response } from 'express'
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import Request from '@aces/interfaces/request'
 import createRound from '@aces/services/rounds/create-round'
+import handleError from '@aces/util/handle-error'
 
-import handleError from '../../../tests/util/handle-error'
 
 
 async function createRoundHandler(request: Request, response: Response): Promise<void> {

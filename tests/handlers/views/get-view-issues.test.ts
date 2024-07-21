@@ -1,3 +1,4 @@
+import { User } from '@prisma/client'
 import { Request, Response } from 'express'
 
 import getIssues from '@aces/handlers/views/get-view-issues'
@@ -9,6 +10,22 @@ const mockGetViewIssues = getViewIssues as jest.Mock
 
 
 describe('getIssues', () => {
+  it('should return 400 if nextPage is not a string', async () => {
+    const request = {
+      user: { id: '123', token: '456' } as User,
+      query: {
+        nextPage: 123
+      }
+    } as unknown as Request
+    const response = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn()
+    } as unknown as Response
+    await getIssues(request, response)
+    expect(response.status).toHaveBeenCalledWith(400)
+    expect(response.json).toHaveBeenCalledWith({ errors: 'Invalid nextPage query parameter. nextPage must be undefined or a string' })
+  })
+
   it('should return 401 if user is not authenticated', async () => {
     const request = {
       user: null,

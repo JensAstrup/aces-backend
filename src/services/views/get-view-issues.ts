@@ -16,7 +16,7 @@ async function getViewIssues(viewId: string, accessToken: string, nextPage?: str
     customView(id: $viewId) {
       id
       name
-      issues(filter: $filter, first: 4, after: $nextPage) {
+      issues(filter: $filter, first: 25, after: $nextPage) {
         pageInfo {
           hasNextPage
           endCursor

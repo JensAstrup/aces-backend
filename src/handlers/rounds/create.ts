@@ -1,7 +1,6 @@
-import { Response } from 'express'
+import { Request, Response } from 'express'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
-import Request from '@aces/interfaces/request'
 import createRound from '@aces/services/rounds/create-round'
 import handleError from '@aces/util/handle-error'
 

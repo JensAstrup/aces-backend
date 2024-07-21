@@ -9,11 +9,11 @@ jest.mock('@linear/sdk', () => {
   return {
     LinearClient: jest.fn(() => {
       return {
-        customViews: jest.fn(() => {
+        favorites: jest.fn(() => {
           return {
             nodes: [
               {
-                modelName: 'Issue'
+                type: 'customView'
               }
             ]
           }
@@ -32,7 +32,7 @@ describe('getFavoriteViews', () => {
       token: '123'
     } as User
     const result = getFavoriteViews(user)
-    await expect(result).resolves.toEqual([{ modelName: 'Issue' }])
+    await expect(result).resolves.toEqual([{ type: 'customView' }])
     await expect(result).resolves.toHaveLength(1)
     expect(decrypt).toHaveBeenCalledWith('123')
     expect(LinearClient).toHaveBeenCalledWith({ accessToken: 'decrypted-token' })

@@ -1,17 +1,23 @@
-import { Response } from 'express'
+import { Request, Response } from 'express'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
-import Request from '@aces/interfaces/request'
 import getViewIssues from '@aces/services/views/get-view-issues'
 
 
 async function getIssues(request: Request, response: Response): Promise<void> {
+  if (request.query.nextPage && typeof request.query.nextPage !== 'string') {
+    response.status(HttpStatusCodes.BAD_REQUEST).json({ errors: 'Invalid nextPage query parameter. nextPage must be undefined or a string' })
+    return
+  }
+
   const user = request.user
   if (!user) {
     response.status(HttpStatusCodes.UNAUTHORIZED).send('Unauthorized')
     return
   }
-  const viewIssues = await getViewIssues(request.params.viewId, user.token)
+  const nextPage = request.query.nextPage
+
+  const viewIssues = await getViewIssues(request.params.viewId, user.token, nextPage)
   response.json(viewIssues)
 }
 

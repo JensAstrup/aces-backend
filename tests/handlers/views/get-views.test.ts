@@ -1,6 +1,8 @@
-import { CustomView } from '@linear/sdk'
+import { Favorite } from '@linear/sdk'
+import { User } from '@prisma/client'
 import { Request, Response } from 'express'
 
+import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import getViews from '@aces/handlers/views/get-views'
 import getFavoriteViews from '@aces/services/views/get-favorite-views'
 
@@ -9,19 +11,58 @@ jest.mock('@aces/services/views/get-favorite-views')
 const mockGetFavoriteViews = getFavoriteViews as jest.MockedFunction<typeof getFavoriteViews>
 
 describe('getViews', () => {
-  it('should return favorite views', async () => {
-    const user = {
-      token: '123'
+  let req: Partial<Request>
+  let res: Partial<Response>
+
+  beforeEach(() => {
+    req = {
+      user: { token: '123' } as User
     }
-    const req = {
-      user
-    } as unknown as Request
-    const res = {
-      json: jest.fn()
-    } as unknown as Response
-    mockGetFavoriteViews.mockResolvedValue([{ id: '1', name: 'Issue' } as CustomView])
-    await getViews(req, res)
-    expect(mockGetFavoriteViews).toHaveBeenCalledWith(user)
-    expect(res.json).toHaveBeenCalledWith([{ id: '1', name: 'Issue' }])
+    res = {
+      json: jest.fn(),
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    }
+  })
+
+  it('should return favorite views', async () => {
+    const mockFavorites = [
+      { customView: Promise.resolve({ id: '1', name: 'Issue' }) },
+      { customView: Promise.resolve({ id: '2', name: 'Board' }) }
+    ] as Favorite[]
+    mockGetFavoriteViews.mockResolvedValue(mockFavorites)
+
+    await getViews(req as Request, res as Response)
+
+    expect(mockGetFavoriteViews).toHaveBeenCalledWith(req.user)
+    expect(res.json).toHaveBeenCalledWith([
+      { id: '1', name: 'Issue' },
+      { id: '2', name: 'Board' }
+    ])
+  })
+
+  it('should handle null custom views', async () => {
+    const mockFavorites = [
+      { customView: Promise.resolve(null) },
+      { customView: Promise.resolve({ id: '2', name: 'Board' }) }
+    ] as Favorite[]
+    mockGetFavoriteViews.mockResolvedValue(mockFavorites)
+
+    await getViews(req as Request, res as Response)
+
+    expect(mockGetFavoriteViews).toHaveBeenCalledWith(req.user)
+    expect(res.json).toHaveBeenCalledWith([
+      null,
+      { id: '2', name: 'Board' }
+    ])
+  })
+
+  it('should return unauthorized if user is not present', async () => {
+    req.user = undefined
+
+    await getViews(req as Request, res as Response)
+
+    expect(res.status).toHaveBeenCalledWith(HttpStatusCodes.UNAUTHORIZED)
+    expect(res.send).toHaveBeenCalledWith('Unauthorized')
   })
 })

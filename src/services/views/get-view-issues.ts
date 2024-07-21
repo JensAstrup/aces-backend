@@ -9,7 +9,6 @@ interface IssueResults {
 }
 
 async function getViewIssues(viewId: string, accessToken: string, nextPage?: string | null): Promise<IssueResults> {
-  console.log('Getting issues for page:', nextPage)
   const decryptedToken = decrypt(accessToken)
   const client = new LinearClient({ accessToken: decryptedToken })
   const graphQlClient = client.client

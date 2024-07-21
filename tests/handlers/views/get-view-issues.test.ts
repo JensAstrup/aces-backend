@@ -1,7 +1,6 @@
-import { Response } from 'express'
+import { Request, Response } from 'express'
 
 import getIssues from '@aces/handlers/views/get-view-issues'
-import Request from '@aces/interfaces/request'
 import getViewIssues from '@aces/services/views/get-view-issues'
 
 
@@ -12,7 +11,8 @@ const mockGetViewIssues = getViewIssues as jest.Mock
 describe('getIssues', () => {
   it('should return 401 if user is not authenticated', async () => {
     const request = {
-      user: null
+      user: null,
+      query: {}
     } as unknown as Request
     const response = {
       status: jest.fn().mockReturnThis(),
@@ -31,6 +31,9 @@ describe('getIssues', () => {
       },
       params: {
         viewId: '789'
+      },
+      query: {
+        page: '1'
       }
     } as unknown as Request
     const response = {

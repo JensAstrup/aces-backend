@@ -1,9 +1,8 @@
 import { User } from '@prisma/client'
-import { Response } from 'express'
+import { Request, Response } from 'express'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import createRoundHandler from '@aces/handlers/rounds/create'
-import Request from '@aces/interfaces/request'
 import createRound from '@aces/services/rounds/create-round'
 
 

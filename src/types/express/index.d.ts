@@ -2,9 +2,7 @@ import { User } from '@prisma/client'
 
 
 declare module 'express' {
-    interface Request {
+  interface Request extends Express.Request {
         user?: User | null
     }
 }
-
-export default Request

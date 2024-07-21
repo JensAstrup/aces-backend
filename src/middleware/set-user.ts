@@ -1,6 +1,5 @@
-import { NextFunction, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 
-import Request from '@aces/interfaces/request'
 import getOrCreateUser from '@aces/services/auth/get-or-create-user'
 
 

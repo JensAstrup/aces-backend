@@ -1,7 +1,6 @@
-import { Response } from 'express'
+import { Request, Response } from 'express'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
-import Request from '@aces/interfaces/request'
 import getFavoriteViews from '@aces/services/views/get-favorite-views'
 
 
@@ -16,8 +15,14 @@ async function getViews(request: Request, response: Response): Promise<void> {
     response.status(HttpStatusCodes.UNAUTHORIZED).send('Unauthorized')
     return
   }
-  const favoriteViews = await getFavoriteViews(user)
-  const returnViews = favoriteViews.map(view => ({ id: view.id, name: view.name })) as View[]
+  const favoriteItems = await getFavoriteViews(user)
+  const customViews = await Promise.all(favoriteItems.map(async favorite => await favorite.customView))
+  const returnViews = customViews.map((view) => {
+    if (!view) {
+      return null
+    }
+    return { id: view.id, name: view.name }
+  })
   response.json(returnViews)
 }
 

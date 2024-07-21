@@ -14,6 +14,10 @@ jest.mock('@linear/sdk', () => {
           data: {
             customView: {
               issues: {
+                pageInfo: {
+                  hasNextPage: false,
+                  endCursor: 'endCursor'
+                },
                 nodes: [
                   {
                     id: '123',
@@ -59,8 +63,8 @@ describe('getViewIssues', () => {
     const decryptedToken = '789'
     mockDecrypt.mockReturnValue(decryptedToken)
 
-    const result = getViewIssues(viewId, accessToken)
-    await expect(result).resolves.toEqual([
+    const result = await getViewIssues(viewId, accessToken, null)
+    expect(result.issues).toEqual([
       {
         id: '123',
         title: 'title',

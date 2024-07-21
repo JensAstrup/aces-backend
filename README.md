@@ -2,6 +2,9 @@
 This is the backend service powering Ace of Spades. 
 It is a RESTful API built with Express and TypeScript.
 
+![Codecov](https://img.shields.io/codecov/c/github/JensAstrup/aces-backend?style=for-the-badge)
+
+
 
 ## Available Scripts
 

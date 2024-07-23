@@ -8,9 +8,10 @@ process.env.ENCRYPTION_KEY = 'test_key'
 
 jest.mock('crypto', () => {
   const originalModule = jest.requireActual('crypto')
+  const SIZE = 32
   return {
     ...originalModule,
-    scryptSync: jest.fn().mockReturnValue(Buffer.alloc(32, 'a')),
+    scryptSync: jest.fn().mockReturnValue(Buffer.alloc(SIZE, 'a')),
     createDecipheriv: jest.fn().mockReturnValue({
       update: jest.fn().mockReturnValue('test data'),
       final: jest.fn().mockReturnValue(''),

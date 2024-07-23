@@ -9,7 +9,8 @@ if (KEY === undefined) {
   throw new ConfigurationError('ENCRYPTION_KEY is required')
 }
 
-const key = scryptSync(KEY, 'salt', 32)
+const KEY_LENGTH = 32
+const key = scryptSync(KEY, 'salt', KEY_LENGTH)
 
 function decrypt(encryptedData: string): string {
   const [ivHex, encrypted] = encryptedData.split(':')

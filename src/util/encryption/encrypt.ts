@@ -11,7 +11,8 @@ if (KEY === undefined) {
 }
 
 // Derive a key using scrypt with a salt
-const key = scryptSync(KEY, 'salt', 32)
+const KEY_LENGTH = 32
+const key = scryptSync(KEY, 'salt', KEY_LENGTH)
 
 function encrypt(data: string): string {
   const iv = randomBytes(IV_LENGTH)

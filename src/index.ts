@@ -1,6 +1,9 @@
-import './pre-start' // Must be the first import
+import './pre-start'
+import http from 'http'
 
-import server from './server'
+import { setupWebSocket } from '@aces/socket/setup-websocket'
+
+import app from './server' // Must be the first import
 
 
 // **** Run **** //
@@ -8,6 +11,9 @@ import server from './server'
 const PORT = process.env.PORT
 const SERVER_START_MSG = ('Express server started on port: ' + PORT)
 
+const server = http.createServer(app)
+
 server.listen(process.env.PORT, () => {
+  setupWebSocket(server)
   console.info(SERVER_START_MSG)
 })

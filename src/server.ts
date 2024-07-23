@@ -1,6 +1,6 @@
 import cors from 'cors'
-import express, { NextFunction, Request, Response } from 'express'
 import 'express-async-errors'
+import express, { NextFunction, Request, Response } from 'express'
 import helmet from 'helmet'
 import morgan from 'morgan'
 

@@ -1,5 +1,6 @@
 import { CustomViewQuery, Issue, LinearClient, LinearRawResponse } from '@linear/sdk'
 
+import { issueFields } from '@aces/linear/issue-fields'
 import decrypt from '@aces/util/encryption/decrypt'
 
 
@@ -8,10 +9,12 @@ interface IssueResults {
   nextPage: string | null
 }
 
+
 async function getViewIssues(viewId: string, accessToken: string, nextPage?: string | null): Promise<IssueResults> {
   const decryptedToken = decrypt(accessToken)
   const client = new LinearClient({ accessToken: decryptedToken })
   const graphQlClient = client.client
+
   const query = `query issues($viewId: String!, $filter: IssueFilter, $nextPage: String) {
     customView(id: $viewId) {
       id
@@ -22,38 +25,7 @@ async function getViewIssues(viewId: string, accessToken: string, nextPage?: str
           endCursor
         }
         nodes {
-          id
-          title
-          description
-          url
-          createdAt
-          creator {
-            id
-            name
-          }
-          team {
-            id
-            name
-          }
-          state {
-            name
-            type
-            }
-            comments {
-                nodes {
-                    id
-                    body
-                    createdAt
-                    user {
-                      id
-                      name
-                      avatarUrl
-                    }
-                    botActor {
-                        id
-                    }
-                }
-            }
+            ${issueFields}
           }
         }
       }

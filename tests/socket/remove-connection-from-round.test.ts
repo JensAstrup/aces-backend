@@ -3,7 +3,7 @@ import { WebSocket } from 'ws'
 import removeConnectionFromRound from '@aces/socket/remove-connection-from-round'
 import { roundConnections } from '@aces/socket/setup-websocket'
 
-// Mock the roundConnections map
+
 jest.mock('@aces/socket/setup-websocket', () => ({
   roundConnections: new Map<string, Set<WebSocket>>()
 }))

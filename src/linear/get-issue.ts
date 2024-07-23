@@ -1,6 +1,6 @@
 import { Issue, LinearClient } from '@linear/sdk'
 
-import { issueFields } from '@aces/linear/issue-query'
+import { issueFields } from '@aces/linear/issue-fields'
 
 
 interface IssueResponse {

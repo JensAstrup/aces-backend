@@ -1,10 +1,10 @@
 import { Issue, LinearClient } from '@linear/sdk'
 
 import getIssue from '@aces/linear/get-issue'
-import { issueFields } from '@aces/linear/issue-query'
+import { issueFields } from '@aces/linear/issue-fields'
 
 
-jest.mock('@aces/linear/issue-query', () => ({
+jest.mock('@aces/linear/issue-fields', () => ({
   issueFields: 'id title description'
 }))
 

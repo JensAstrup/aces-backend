@@ -1,6 +1,11 @@
+import { setupWebSocket } from '@aces/socket/setup-websocket'
+
 import cors from 'cors'
 import express, { NextFunction, Request, Response } from 'express'
+
 import 'express-async-errors'
+import http from 'http'
+
 import helmet from 'helmet'
 import morgan from 'morgan'
 

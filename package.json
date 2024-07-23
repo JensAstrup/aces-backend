@@ -29,6 +29,7 @@
     "@dotenvx/dotenvx": "^1.6.4",
     "@linear/sdk": "^24.0.0",
     "@prisma/client": "5.17.0",
+    "@types/ws": "^8.5.11",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
@@ -45,7 +46,8 @@
     "morgan": "^1.10.0",
     "qs": "^6.12.3",
     "ts-command-line-args": "^2.5.1",
-    "ts-jest": "^29.2.2"
+    "ts-jest": "^29.2.2",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

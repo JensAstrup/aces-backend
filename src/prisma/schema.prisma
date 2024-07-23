@@ -34,7 +34,6 @@ model Vote{
 model Issue{
   id               String    @id @default(cuid())
   linearId         String?
-  title            String
   round            Round     @relation(fields: [roundId], references: [id])
   roundId          String
   votes            Vote[]

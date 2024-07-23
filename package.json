@@ -45,7 +45,7 @@
     "morgan": "^1.10.0",
     "qs": "^6.12.3",
     "ts-command-line-args": "^2.5.1",
-    "ts-jest": "^29.2.2",
+    "ts-jest": "^29.2.3",
     "ws": "^8.18.0"
   },
   "devDependencies": {

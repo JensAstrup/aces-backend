@@ -1,50 +1,45 @@
-import { AES } from 'crypto-js'
+import { createCipheriv } from 'crypto'
+
+import { encrypt } from '@dotenvx/dotenvx'
 
 import ConfigurationError from '@aces/errors/configuration-error'
-import encrypt from '@aces/util/encryption/encrypt'
 
 
-jest.mock('crypto-js', () => {
+// Mock the environment variable
+process.env.ENCRYPTION_KEY = 'test_key'
+
+// Mock scryptSync to return a predictable key
+jest.mock('crypto', () => {
+  const originalModule = jest.requireActual('crypto')
   return {
-    AES: {
-      encrypt: jest.fn().mockReturnValue({ toString: jest.fn() }),
-    },
+    ...originalModule,
+    scryptSync: jest.fn().mockReturnValue(Buffer.alloc(32, 'a')),
   }
 })
 
+jest.mock('createCipheriv')
+const mockCreateCipheriv = createCipheriv as jest.Mock
+
 describe('encrypt', () => {
-  let originalEnv: NodeJS.ProcessEnv
-
-  beforeAll(() => {
-    // Save the original process.env
-    originalEnv = process.env
-  })
-
-  afterAll(() => {
-    // Restore the original process.env
-    process.env = originalEnv
+  it('should throw ConfigurationError if ENCRYPTION_KEY is undefined', () => {
+    delete process.env.ENCRYPTION_KEY
+    expect(() => encrypt('data')).toThrow(ConfigurationError)
+    process.env.ENCRYPTION_KEY = 'test_key'
   })
 
   it('should return an encrypted string', () => {
-    const data = 'test-data'
-    process.env.ENCRYPTION_KEY = 'test-key'
-    const encryptMock = AES.encrypt as jest.Mock
-    encryptMock.mockReturnValue({ toString: jest.fn().mockReturnValue('encrypted-data') })
-    const result = encrypt(data)
-    expect(result).toEqual('encrypted-data')
+    const data = 'test data'
+    const encrypted = encrypt(data)
+    expect(typeof encrypted).toBe('string')
+    expect(encrypted).toMatch(/^[0-9a-fA-F]+:[0-9a-fA-F]+$/)
   })
 
-  it('should throw ConfigurationError when ENCRYPTION_KEY is not set', async () => {
-    process.env = { ...originalEnv, ENCRYPTION_KEY: undefined }
-
-    /* eslint-disable jest/no-conditional-expect */
-    try {
-      await import('@aces/util/encryption/encrypt')
-    }
-    catch (e) {
-      expect(e).toBeInstanceOf(ConfigurationError)
-      expect(e.message).toBe('ENCRYPTION_KEY is required')
-    }
-    /* eslint-enable jest/no-conditional-expect */
+  it('should use AES-256-CBC for encryption', () => {
+    encrypt('test data')
+    expect(mockCreateCipheriv).toHaveBeenCalledWith(
+      'aes-256-cbc',
+      Buffer.alloc(32, 'a'),
+      expect.any(Buffer)
+    )
   })
 })

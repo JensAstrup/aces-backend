@@ -1,17 +1,14 @@
-import * as CryptoJS from 'crypto-js'
-
-import ConfigurationError from '@aces/errors/configuration-error'
+import { createDecipheriv } from 'crypto'
 
 
-const KEY = process.env.ENCRYPTION_KEY
-
-if (!KEY) {
-  throw new ConfigurationError('ENCRYPTION_KEY is required')
-}
-
-function decrypt(data: string): string {
-  const bytes = CryptoJS.AES.decrypt(data, KEY!)
-  return bytes.toString(CryptoJS.enc.Utf8)
+function decrypt(encryptedData: string): string {
+  const key = process.env.ENCRYPTION_KEY!
+  const [ivHex, encrypted] = encryptedData.split(':')
+  const iv = Buffer.from(ivHex, 'hex')
+  const decipher = createDecipheriv('aes-256-cbc', key, iv)
+  let decrypted = decipher.update(encrypted, 'hex', 'utf8')
+  decrypted += decipher.final('utf8')
+  return decrypted
 }
 
 export default decrypt

@@ -1,24 +1,24 @@
-import { createCipheriv } from 'crypto'
-
-import { encrypt } from '@dotenvx/dotenvx'
+import crypto from 'crypto'
 
 import ConfigurationError from '@aces/errors/configuration-error'
+import encrypt from '@aces/util/encryption/encrypt'
 
 
-// Mock the environment variable
+
 process.env.ENCRYPTION_KEY = 'test_key'
 
-// Mock scryptSync to return a predictable key
 jest.mock('crypto', () => {
   const originalModule = jest.requireActual('crypto')
   return {
     ...originalModule,
     scryptSync: jest.fn().mockReturnValue(Buffer.alloc(32, 'a')),
+    randomBytes: jest.fn().mockReturnValue(Buffer.alloc(16, 'b')),
+    createCipheriv: jest.fn().mockReturnValue({
+      update: jest.fn().mockReturnValue('62626262626262626262626262626262'),
+      final: jest.fn().mockReturnValue(''),
+    }),
   }
 })
-
-jest.mock('createCipheriv')
-const mockCreateCipheriv = createCipheriv as jest.Mock
 
 describe('encrypt', () => {
   it('should throw ConfigurationError if ENCRYPTION_KEY is undefined', () => {
@@ -35,11 +35,12 @@ describe('encrypt', () => {
   })
 
   it('should use AES-256-CBC for encryption', () => {
+    const createCipherivSpy = jest.spyOn(crypto, 'createCipheriv')
     encrypt('test data')
-    expect(mockCreateCipheriv).toHaveBeenCalledWith(
+    expect(createCipherivSpy).toHaveBeenCalledWith(
       'aes-256-cbc',
       Buffer.alloc(32, 'a'),
-      expect.any(Buffer)
+      Buffer.alloc(16, 'b')
     )
   })
 })

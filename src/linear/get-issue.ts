@@ -12,7 +12,7 @@ async function getIssue(issueId: string, accessToken: string): Promise<Issue | n
   const graphQlClient = client.client
   const query = `query issue($issueId: String!) {
         issue(id: $issueId) {
-        ${issueFields}
+          ${issueFields}
         }
     }`
   const variables = { issueId }

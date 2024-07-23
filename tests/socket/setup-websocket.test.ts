@@ -1,6 +1,6 @@
 import http from 'http'
 
-import { WebSocket, WebSocketServer } from 'ws'
+import { WebSocketServer } from 'ws'
 
 import createWebSocketServer from '@aces/socket/create'
 import { handleNewConnection } from '@aces/socket/handle-new-connection'

@@ -1,6 +1,5 @@
 import { Prisma, PrismaClient, Round } from '@prisma/client'
 
-import NotFoundError from '@aces/errors/not-found'
 import getRound from '@aces/services/rounds/get-round'
 
 

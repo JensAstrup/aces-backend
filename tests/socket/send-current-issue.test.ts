@@ -86,7 +86,6 @@ describe('sendCurrentIssue', () => {
   })
 
   it('should close the connection if round is not found', async () => {
-    // @ts-ignore
     mockPrismaClient.round.findUnique.mockResolvedValue(null)
 
     await sendCurrentIssue('non_existent_round', mockWs)
@@ -101,7 +100,6 @@ describe('sendCurrentIssue', () => {
       currentIssue: null
     } as unknown as Round
 
-    // @ts-ignore
     mockPrismaClient.round.findUnique.mockResolvedValue(mockRound)
 
     await sendCurrentIssue('round_without_issue', mockWs)

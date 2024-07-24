@@ -22,7 +22,6 @@ model User {
 
 model Vote{
   id               String    @id @default(cuid())
-  linearId         String?
   issue            Issue     @relation(fields: [issueId], references: [id])
   issueId          String
   user             User      @relation(fields: [userId], references: [id])
@@ -38,6 +37,8 @@ model Issue{
   roundId          String
   votes            Vote[]
   activeRounds     Round[]   @relation("currentIssue")
+
+  @@unique([roundId, linearId])
 }
 
 enum RoundStatus {

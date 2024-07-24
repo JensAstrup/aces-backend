@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import { WebSocket } from 'ws'
 
 import { WebSocketCloseCode } from '@aces/common/WebSocketCodes'
-import getIssue from '@aces/linear/get-issue'
+import getLinearIssue from '@aces/linear/get-linear-issue'
 import decrypt from '@aces/util/encryption/decrypt'
 
 
@@ -28,7 +28,7 @@ async function sendCurrentIssue(roundId: string, ws: WebSocket): Promise<void> {
         console.error(`No issue ID found for current issue in round ${roundId}`)
         return
       }
-      const issue = await getIssue(issueId, decrypt(round.creator.token))
+      const issue = await getLinearIssue(issueId, decrypt(round.creator.token))
       if (issue) {
         ws.send(JSON.stringify(issue))
       }

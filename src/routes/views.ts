@@ -4,8 +4,8 @@ import getIssues from '@aces/handlers/views/get-view-issues'
 import getViews from '@aces/handlers/views/get-views'
 
 
-const viewRouter = Router()
-viewRouter.get('/', getViews)
-viewRouter.get('/:viewId/issues', getIssues)
+const viewsRouter = Router()
+viewsRouter.get('/:viewId/issues', getIssues)
+viewsRouter.get('/', getViews)
 
-export default viewRouter
+export default viewsRouter

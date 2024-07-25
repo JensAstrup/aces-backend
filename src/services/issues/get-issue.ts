@@ -3,8 +3,12 @@ import { Issue, PrismaClient } from '@prisma/client'
 
 const prismaClient = new PrismaClient()
 
-async function getIssue(roundId: string, issueId?: string, linearId?: string): Promise<Issue> {
-  let issue: Issue | null = null
+// One of the following parameters must be provided: issueId or linearId
+type GetIssueParams = { roundId: string, issueId: string, linearId: never } | { roundId: string, issueId?: never, linearId: string }
+
+
+async function getIssue({ roundId, issueId, linearId }: GetIssueParams): Promise<Issue | null> {
+  let issue: Issue | null
 
   if (issueId) {
     issue = await prismaClient.issue.findUnique({
@@ -14,17 +18,13 @@ async function getIssue(roundId: string, issueId?: string, linearId?: string): P
       }
     })
   }
-  else if (linearId) {
+  else {
     issue = await prismaClient.issue.findFirst({
       where: {
         linearId: linearId,
         roundId: roundId
       }
     })
-  }
-
-  if (!issue) {
-    throw new Error('Issue not found')
   }
 
   return issue

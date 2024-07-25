@@ -18,7 +18,7 @@ async function setVoteHandler(request: Request, response: Response): Promise<voi
     response.status(HttpStatusCodes.FORBIDDEN).json({ error: 'Forbidden' })
     return
   }
-  await setVote(issueId, roundId, vote, user)
+  await setVote(roundId, issueId, vote, user)
   response.status(HttpStatusCodes.OK).json({ message: 'Estimate set' })
 }
 

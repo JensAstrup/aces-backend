@@ -28,6 +28,8 @@ model Vote {
   userId    String
   vote      Int
   createdAt DateTime @default(now())
+
+  @@unique([issueId, userId])
 }
 
 model Issue {

@@ -1,6 +1,5 @@
 import getOrCreateUser from '@aces/services/auth/get-or-create-user'
 import decrypt from '@aces/util/encryption/decrypt'
-import encrypt from '@aces/util/encryption/encrypt'
 
 
 jest.mock('@aces/services/auth/linear-user', () => {

@@ -1,4 +1,4 @@
-import { Issue, PrismaClient, Round } from '@prisma/client'
+import { Issue, PrismaClient } from '@prisma/client'
 
 import getIssue from '@aces/services/issues/get-issue'
 

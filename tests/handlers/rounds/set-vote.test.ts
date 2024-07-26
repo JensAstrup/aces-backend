@@ -8,8 +8,6 @@ import canAccessRound from '@aces/util/can-access-round'
 
 jest.mock('@aces/services/rounds/set-vote')
 jest.mock('@aces/util/can-access-round')
-const mockSetVote = setVote as jest.MockedFunction<typeof setVote>
-const mockCanAccessRound = canAccessRound as jest.MockedFunction<typeof canAccessRound>
 
 describe('setVoteHandler', () => {
   let mockRequest: Partial<Request>

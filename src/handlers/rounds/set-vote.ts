@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
-import canAccessRound from '@aces/handlers/auth/can-access-round'
 import setVote from '@aces/services/rounds/set-vote'
+import canAccessRound from '@aces/util/can-access-round'
 
 
 async function setVoteHandler(request: Request, response: Response): Promise<void> {

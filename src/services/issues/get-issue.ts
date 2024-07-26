@@ -4,7 +4,7 @@ import { Issue, PrismaClient } from '@prisma/client'
 const prismaClient = new PrismaClient()
 
 // One of the following parameters must be provided: issueId or linearId
-type GetIssueParams = { roundId: string, issueId: string, linearId: never } | { roundId: string, issueId?: never, linearId: string }
+type GetIssueParams = { roundId: string, issueId: string, linearId?: never } | { roundId: string, issueId?: never, linearId: string }
 
 
 async function getIssue({ roundId, issueId, linearId }: GetIssueParams): Promise<Issue | null> {

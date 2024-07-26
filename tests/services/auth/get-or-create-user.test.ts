@@ -1,4 +1,5 @@
 import getOrCreateUser from '@aces/services/auth/get-or-create-user'
+import decrypt from '@aces/util/encryption/decrypt'
 import encrypt from '@aces/util/encryption/encrypt'
 
 
@@ -11,10 +12,9 @@ jest.mock('@aces/services/auth/linear-user', () => {
   }
   return jest.fn().mockResolvedValue(user)
 })
-jest.mock('@aces/util/encryption/encrypt', () => jest.fn().mockReturnValue('abcdef'))
-const mockEncrypt = encrypt as jest.Mock
+jest.mock('@aces/util/encryption/decrypt', () => jest.fn().mockReturnValue('abcdef'))
+const mockDecrypt = decrypt as jest.Mock
 
-// Mock PrismaClient
 jest.mock('@prisma/client', () => {
   const mockPrismaClient = {
     user: {
@@ -44,6 +44,6 @@ describe('getOrCreateUser', () => {
       linearId: 'linear-123456',
       token: 'abcdef'
     })
-    expect(mockEncrypt).toHaveBeenCalledWith('token-123456')
+    expect(mockDecrypt).toHaveBeenCalledWith('token-123456')
   })
 })

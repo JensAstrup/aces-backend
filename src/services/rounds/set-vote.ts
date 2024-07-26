@@ -10,10 +10,7 @@ async function setVote(roundId: string, linearId: string, vote: number, user: Us
   if (!issue) {
     issue = await createIssue(roundId, linearId)
   }
-  const createdVote = await createVote(issue, user, vote)
-  console.log(`User ${user.id} set vote ${vote} for issue ${issue.id}`)
-  console.log(`Vote ID: ${createdVote.id}`)
-  return createdVote
+  return await createVote(issue, user, vote)
 }
 
 export default setVote

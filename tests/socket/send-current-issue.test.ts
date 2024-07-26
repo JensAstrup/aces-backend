@@ -3,7 +3,7 @@ import { PrismaClient, Round } from '@prisma/client'
 import { WebSocket } from 'ws'
 
 import { WebSocketCloseCode } from '@aces/common/WebSocketCodes'
-import getIssue from '@aces/linear/get-issue'
+import getLinearIssue from '@aces/linear/get-linear-issue'
 import sendCurrentIssue from '@aces/socket/send-current-issue'
 import decrypt from '@aces/util/encryption/decrypt'
 
@@ -30,10 +30,10 @@ jest.mock('@prisma/client', () => {
   }
 })
 
-jest.mock('@aces/linear/get-issue')
+jest.mock('@aces/linear/get-linear-issue')
 jest.mock('@aces/util/encryption/decrypt')
 
-const mockGetIssue = getIssue as jest.MockedFunction<typeof getIssue>
+const mockGetIssue = getLinearIssue as jest.MockedFunction<typeof getLinearIssue>
 const mockDecrypt = decrypt as jest.MockedFunction<typeof decrypt>
 
 describe('sendCurrentIssue', () => {

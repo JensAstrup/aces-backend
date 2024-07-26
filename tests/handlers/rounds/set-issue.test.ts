@@ -7,7 +7,7 @@ import setIssue from '@aces/services/rounds/set-issue'
 import sendMessageToRound from '@aces/socket/send-message-to-round'
 import decrypt from '@aces/util/encryption/decrypt'
 
-// Mock dependencies
+
 jest.mock('@aces/services/rounds/set-issue')
 jest.mock('@aces/socket/send-message-to-round')
 jest.mock('@aces/util/encryption/decrypt')

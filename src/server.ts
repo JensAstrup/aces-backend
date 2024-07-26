@@ -1,3 +1,4 @@
+
 import cors from 'cors'
 import 'express-async-errors'
 import express, { NextFunction, Request, Response } from 'express'
@@ -8,9 +9,7 @@ import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import { NodeEnvs } from '@aces/common/misc'
 import RouteError from '@aces/errors/route-error'
 import setUser from '@aces/middleware/set-user'
-import BaseRouter from '@aces/routes/auth'
-import roundsRouter from '@aces/routes/rounds'
-import viewRouter from '@aces/routes/views'
+import appRouter from '@aces/routes/index'
 
 
 // **** Variables **** //
@@ -38,9 +37,7 @@ if (process.env.NODE_ENV === NodeEnvs.Production.valueOf()) {
   app.use(helmet())
 }
 
-app.use('/views', viewRouter)
-app.use('/rounds', roundsRouter)
-app.use('/', BaseRouter)
+app.use('/', appRouter)
 
 
 // Add error handler

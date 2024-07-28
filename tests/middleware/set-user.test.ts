@@ -2,11 +2,11 @@ import { User } from '@prisma/client'
 import { Request, Response } from 'express'
 
 import setUser from '@aces/middleware/set-user'
-import getOrCreateUser from '@aces/services/auth/get-or-create-user'
+import getUser from '@aces/services/auth/get-or-create-user'
 
 
 jest.mock('@aces/services/auth/get-or-create-user')
-const mockGetOrCreateUser = getOrCreateUser as jest.MockedFunction<typeof getOrCreateUser>
+const mockGetUser = getUser as jest.MockedFunction<typeof getUser>
 
 describe('setUser', () => {
   it('should set user on request', async () => {
@@ -20,10 +20,10 @@ describe('setUser', () => {
     } as unknown as Request
     const res = {} as Response
     const next = jest.fn()
-    mockGetOrCreateUser.mockResolvedValue(user)
+    mockGetUser.mockResolvedValue(user)
     await setUser(req, res, next)
     expect(req.user).toEqual(user)
-    expect(mockGetOrCreateUser).toHaveBeenCalledWith('123', true)
+    expect(mockGetUser).toHaveBeenCalledWith('123')
     expect(next).toHaveBeenCalled()
   })
 })

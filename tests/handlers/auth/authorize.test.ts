@@ -1,12 +1,16 @@
 import { Response } from 'express'
 
 import authorize, { IncomingAccessTokenRequest } from '@aces/handlers/auth/authorize'
-import getOrCreateUser from '@aces/services/auth/get-or-create-user'
+import { createUser } from '@aces/services/auth/get-or-create-user'
 
 
 jest.mock('@aces/services/auth/exchange-code', () => jest.fn().mockReturnValue('123456'))
-jest.mock('@aces/services/auth/get-or-create-user', () => jest.fn().mockReturnValue({ token: 'abcdef' }))
-const mockGetOrCreateUser = getOrCreateUser as jest.Mock
+jest.mock('@aces/services/auth/get-or-create-user', () => {
+  return {
+    createUser: jest.fn().mockResolvedValue({ token: 'abcdef' })
+  }
+})
+const mockCreateUser = createUser as jest.Mock
 
 
 describe('authorize', () => {
@@ -36,31 +40,8 @@ describe('authorize', () => {
       status: jest.fn().mockReturnValue({ json }),
     } as unknown as Response
     const error = new Error('An error occurred')
-    mockGetOrCreateUser.mockRejectedValue(error)
+    mockCreateUser.mockRejectedValue(error)
     jest.spyOn(console, 'error').mockImplementation(() => {})
-    await authorize(request, response)
-    expect(response.status).toHaveBeenCalledWith(500)
-    expect(console.error).toHaveBeenCalledWith(error)
-    expect(json).toHaveBeenCalledWith({ error: 'An error occurred' })
-  })
-
-  it('should return an error message if the response is not ok', async () => {
-    const request = {
-      body: {
-        code: '123456',
-      },
-    } as unknown as IncomingAccessTokenRequest
-    const json = jest.fn()
-    const response = {
-      status: jest.fn().mockReturnValue({ json }),
-    } as unknown as Response
-    const error = { response: { data: 'An error occurred' } }
-    mockGetOrCreateUser.mockRejectedValue(error)
-    jest.spyOn(console, 'error').mockImplementation(() => {})
-    await authorize(request, response)
-    expect(response.status).toHaveBeenCalledWith(500)
-    expect(console.error).toHaveBeenCalledWith(error)
-    expect(console.error).toHaveBeenCalledWith(error.response.data)
-    expect(json).toHaveBeenCalledWith({ error: 'An error occurred' })
+    await expect(authorize(request, response)).rejects.toThrow(error)
   })
 })

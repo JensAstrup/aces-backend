@@ -3,6 +3,7 @@ import { PrismaClient, User } from '@prisma/client'
 
 import getLinearUser from '@aces/services/auth/linear-user'
 import decrypt from '@aces/util/encryption/decrypt'
+import encrypt from '@aces/util/encryption/encrypt'
 
 
 const prisma = new PrismaClient()
@@ -28,11 +29,8 @@ async function getAndUpdateLinearUser(accessToken: string): Promise<User> {
   return user
 }
 
-async function getOrCreateUser(accessToken: string, encrypted: boolean = false): Promise<User> {
-  let decryptedAccessToken = accessToken
-  if (encrypted) {
-    decryptedAccessToken = decrypt(accessToken)
-  }
+async function getUser(accessToken: string): Promise<User> {
+  const decryptedAccessToken = decrypt(accessToken)
   if (decryptedAccessToken.startsWith('anonymous-')) {
     return prisma.user.findUniqueOrThrow({
       where: {
@@ -45,4 +43,11 @@ async function getOrCreateUser(accessToken: string, encrypted: boolean = false):
   }
 }
 
-export default getOrCreateUser
+
+async function createUser(accessToken: string): Promise<User> {
+  const encryptedAccessToken = encrypt(accessToken)
+  return getAndUpdateLinearUser(encryptedAccessToken)
+}
+
+export default getUser
+export { createUser }

@@ -1,6 +1,6 @@
 import { Issue, LinearClient } from '@linear/sdk'
 
-import getIssue from '@aces/linear/get-issue'
+import getLinearIssue from '@aces/linear/get-linear-issue'
 import { issueFields } from '@aces/linear/issue-fields'
 
 
@@ -36,7 +36,7 @@ describe('getIssue', () => {
       client: { request: mockRequest }
     }))
 
-    const result = await getIssue(mockIssueId, mockAccessToken)
+    const result = await getLinearIssue(mockIssueId, mockAccessToken)
 
     expect(result).toEqual(mockIssue)
     expect(mockLinearClient).toHaveBeenCalledWith({ accessToken: mockAccessToken })
@@ -52,7 +52,7 @@ describe('getIssue', () => {
       client: { request: mockRequest }
     }))
 
-    const result = await getIssue(mockIssueId, mockAccessToken)
+    const result = await getLinearIssue(mockIssueId, mockAccessToken)
 
     expect(result).toBeNull()
   })
@@ -63,7 +63,7 @@ describe('getIssue', () => {
       client: { request: mockRequest }
     }))
 
-    await getIssue(mockIssueId, mockAccessToken)
+    await getLinearIssue(mockIssueId, mockAccessToken)
 
     expect(mockRequest).toHaveBeenCalledWith(
       expect.stringContaining(issueFields),
@@ -78,6 +78,6 @@ describe('getIssue', () => {
       client: { request: mockRequest }
     }))
 
-    await expect(getIssue(mockIssueId, mockAccessToken)).rejects.toThrow('API request failed')
+    await expect(getLinearIssue(mockIssueId, mockAccessToken)).rejects.toThrow('API request failed')
   })
 })

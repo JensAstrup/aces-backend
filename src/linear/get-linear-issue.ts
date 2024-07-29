@@ -7,7 +7,7 @@ interface IssueResponse {
     issue: Issue | null
 }
 
-async function getIssue(issueId: string, accessToken: string): Promise<Issue | null> {
+async function getLinearIssue(issueId: string, accessToken: string): Promise<Issue | null> {
   const client = new LinearClient({ accessToken })
   const graphQlClient = client.client
   const query = `query issue($issueId: String!) {
@@ -20,4 +20,4 @@ async function getIssue(issueId: string, accessToken: string): Promise<Issue | n
   return response.issue ? response.issue : null
 }
 
-export default getIssue
+export default getLinearIssue

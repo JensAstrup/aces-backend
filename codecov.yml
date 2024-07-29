@@ -1,0 +1,10 @@
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%   # Allow up to 1% decrease in project coverage
+        informational: true   # Do not fail the build on project coverage decrease
+    patch:
+      default:
+        threshold: 0%

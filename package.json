@@ -1,6 +1,6 @@
 {
   "name": "aces-backend",
-  "version": "1.0.0-alpha.5",
+  "version": "1.0.0-alpha.6",
   "scripts": {
     "build": "yarn run generate && npx ts-node build.ts",
     "lint": "npx eslint --ext .ts src/ tests/",
@@ -46,6 +46,7 @@
     "qs": "^6.12.3",
     "ts-command-line-args": "^2.5.1",
     "ts-jest": "^29.2.3",
+    "uuid": "^10.0.0",
     "ws": "^8.18.0"
   },
   "devDependencies": {
@@ -61,8 +62,9 @@
     "@types/jsonfile": "^6.1.4",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
-    "@types/node": "^20.14.10",
+    "@types/node": "^20.14.11",
     "@types/supertest": "^6.0.2",
+    "@types/uuid": "^10.0.0",
     "@types/ws": "^8.5.11",
     "@typescript-eslint/eslint-plugin": "^7.16.1",
     "@typescript-eslint/parser": "^7.16.1",

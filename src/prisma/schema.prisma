@@ -8,36 +8,39 @@ datasource db {
 }
 
 model User {
-  id               String    @id @default(cuid())
-  linearId         String?   @unique
-  email            String?   @unique
-  displayName      String?
-  token            String    @unique
-  created_rounds   Round[]
-  joined_rounds    RoundGuest[]
-  votes            Vote[]
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  id             String       @id @default(cuid())
+  linearId       String?      @unique
+  email          String?      @unique
+  displayName    String?
+  token          String       @unique
+  created_rounds Round[]
+  joined_rounds  RoundGuest[]
+  votes          Vote[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
-model Vote{
-  id               String    @id @default(cuid())
-  linearId         String?
-  issue            Issue     @relation(fields: [issueId], references: [id])
-  issueId          String
-  user             User      @relation(fields: [userId], references: [id])
-  userId           String
-  vote             Int
-  createdAt        DateTime  @default(now())
+model Vote {
+  id        String   @id @default(cuid())
+  issue     Issue    @relation(fields: [issueId], references: [id])
+  issueId   String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  vote      Int
+  createdAt DateTime @default(now())
+
+  @@unique([issueId, userId])
 }
 
-model Issue{
-  id               String    @id @default(cuid())
-  linearId         String?
-  round            Round     @relation(fields: [roundId], references: [id])
-  roundId          String
-  votes            Vote[]
-  activeRounds     Round[]   @relation("currentIssue")
+model Issue {
+  id           String  @id @default(cuid())
+  linearId     String?
+  round        Round   @relation(fields: [roundId], references: [id])
+  roundId      String
+  votes        Vote[]
+  activeRounds Round[] @relation("currentIssue")
+
+  @@unique([roundId, linearId])
 }
 
 enum RoundStatus {
@@ -46,23 +49,23 @@ enum RoundStatus {
 }
 
 model Round {
-  id               String    @id @default(cuid())
-  creator          User      @relation(fields: [creatorId], references: [id])
-  creatorId        String
-  guests           RoundGuest[]
-  issues           Issue[]
-  status           RoundStatus @default(CREATED)
-  currentIssue     Issue?      @relation("currentIssue", fields: [currentIssueId], references: [id])
-  currentIssueId   String?
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  id             String       @id @default(cuid())
+  creator        User         @relation(fields: [creatorId], references: [id])
+  creatorId      String
+  guests         RoundGuest[]
+  issues         Issue[]
+  status         RoundStatus  @default(CREATED)
+  currentIssue   Issue?       @relation("currentIssue", fields: [currentIssueId], references: [id])
+  currentIssueId String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 model RoundGuest {
-  user             User      @relation(fields: [userId], references: [id])
-  userId           String
-  round            Round     @relation(fields: [roundId], references: [id])
-  roundId          String
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+  round   Round  @relation(fields: [roundId], references: [id])
+  roundId String
 
   @@id([userId, roundId])
 }

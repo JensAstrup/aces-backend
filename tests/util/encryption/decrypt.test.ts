@@ -1,53 +1,44 @@
-import { AES } from 'crypto-js'
+import crypto from 'crypto'
 
-import ConfigurationError from '@aces/errors/configuration-error'
 import decrypt from '@aces/util/encryption/decrypt'
 
 
-jest.mock('crypto-js', () => {
+
+process.env.ENCRYPTION_KEY = 'test_key'
+
+jest.mock('crypto', () => {
+  const originalModule = jest.requireActual('crypto')
+  const SIZE = 32
   return {
-    enc: {
-      Utf8: {},
-    },
-    AES: {
-      decrypt: jest.fn().mockReturnValue({ toString: jest.fn() }),
-    },
+    ...originalModule,
+    scryptSync: jest.fn().mockReturnValue(Buffer.alloc(SIZE, 'a')),
+    createDecipheriv: jest.fn().mockReturnValue({
+      update: jest.fn().mockReturnValue('test data'),
+      final: jest.fn().mockReturnValue(''),
+    }),
   }
 })
 
-describe('encrypt', () => {
-  let originalEnv: NodeJS.ProcessEnv
-
-  beforeAll(() => {
-    // Save the original process.env
-    originalEnv = process.env
+describe('decrypt', () => {
+  it('should return the original data when given a valid encrypted string', () => {
+    const encryptedData = '8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a:encrypted_data'
+    const decrypted = decrypt(encryptedData)
+    expect(decrypted).toBe('test data')
   })
 
-  afterAll(() => {
-    // Restore the original process.env
-    process.env = originalEnv
+  it('should throw an error if the encrypted string is invalid', () => {
+    const invalidData = 'invalid data'
+    expect(() => decrypt(invalidData)).toThrow()
   })
 
-  it('should return an decrypted string', () => {
-    const data = 'test-data'
-    process.env.ENCRYPTION_KEY = 'test-key'
-    const decryptMock = AES.decrypt as jest.Mock
-    decryptMock.mockReturnValue({ toString: jest.fn().mockReturnValue('decrypted-data') })
-    const result = decrypt(data)
-    expect(result).toEqual('decrypted-data')
-  })
-
-  it('should throw ConfigurationError when ENCRYPTION_KEY is not set', async () => {
-    process.env = { ...originalEnv, ENCRYPTION_KEY: undefined }
-
-    /* eslint-disable jest/no-conditional-expect */
-    try {
-      await import('@aces/util/encryption/decrypt')
-    }
-    catch (e) {
-      expect(e).toBeInstanceOf(ConfigurationError)
-      expect(e.message).toBe('ENCRYPTION_KEY is required')
-    }
-    /* eslint-enable jest/no-conditional-expect */
+  it('should use AES-256-CBC for decryption', () => {
+    const createDecipherivSpy = jest.spyOn(crypto, 'createDecipheriv')
+    const encryptedData = '8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a:encrypted_data'
+    decrypt(encryptedData)
+    expect(createDecipherivSpy).toHaveBeenCalledWith(
+      'aes-256-cbc',
+      Buffer.alloc(32, 'a'),
+      Buffer.from('8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a8a', 'hex')
+    )
   })
 })

@@ -8,27 +8,46 @@ import encrypt from '@aces/util/encryption/encrypt'
 
 const prisma = new PrismaClient()
 
-async function getOrCreateUser(accessToken: string, encrypted: boolean = false): Promise<User> {
-  if (encrypted) {
-    accessToken = decrypt(accessToken)
-  }
-  const linearUser: LinearUser = await getLinearUser(accessToken)
-  const encryptedAccessToken = encrypt(accessToken)
+
+async function getAndUpdateLinearUser(accessToken: string): Promise<User> {
+  const linearToken = decrypt(accessToken)
+  const linearUser: LinearUser = await getLinearUser(linearToken)
   const user = await prisma.user.upsert({
     where: { linearId: linearUser.id },
     update: {
       email: linearUser.email,
       displayName: linearUser.displayName,
-      token: encryptedAccessToken,
+      token: accessToken,
     },
     create: {
       email: linearUser.email,
       displayName: linearUser.displayName,
       linearId: linearUser.id,
-      token: encryptedAccessToken,
+      token: accessToken,
     },
   })
   return user
 }
 
-export default getOrCreateUser
+async function getUser(accessToken: string): Promise<User> {
+  const decryptedAccessToken = decrypt(accessToken)
+  if (decryptedAccessToken.startsWith('anonymous-')) {
+    return prisma.user.findUniqueOrThrow({
+      where: {
+        token: accessToken,
+      }
+    })
+  }
+  else {
+    return getAndUpdateLinearUser(accessToken)
+  }
+}
+
+
+async function createUser(accessToken: string): Promise<User> {
+  const encryptedAccessToken = encrypt(accessToken)
+  return getAndUpdateLinearUser(encryptedAccessToken)
+}
+
+export default getUser
+export { createUser }

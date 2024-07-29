@@ -37,7 +37,7 @@
     "express": "^4.19.2",
     "express-async-errors": "^3.1.1",
     "helmet": "^7.1.0",
-    "inserturlparams": "^1.1.2",
+    "inserturlparams": "^2.0.1",
     "jsonfile": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
     "module-alias": "^2.2.3",

@@ -3260,10 +3260,10 @@ inherits@2, inherits@2.0.4, inherits@^2.0.3:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
-inserturlparams@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/inserturlparams/-/inserturlparams-1.1.2.tgz#b8bda9038f616e4eee4b4535f2e883e1f173070f"
-  integrity sha512-5ZEGE0x1+jYWelXOp0euZCnWRg5rCiodRBM514LnNAETgpQ/oJV7dX5vJf9WuWsBmY/1DsuX2SYnB3C6WtVm9A==
+inserturlparams@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/inserturlparams/-/inserturlparams-2.0.1.tgz#3d0254860c4f43dc8c5f1c43bff195da07f877cf"
+  integrity sha512-x6wbLRBz5oBPm6ZN/B+aORBQj4fY/Nht/14HFf569AG7+OIR1JFNrRHf5r1cozxVjINT+N2fXpbBU6BqjDb/Aw==
 
 internal-slot@^1.0.7:
   version "1.0.7"

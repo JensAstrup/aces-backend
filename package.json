@@ -67,7 +67,7 @@
     "@types/uuid": "^10.0.0",
     "@types/ws": "^8.5.11",
     "@typescript-eslint/eslint-plugin": "^7.16.1",
-    "@typescript-eslint/parser": "^7.16.1",
+    "@typescript-eslint/parser": "^7.17.0",
     "eslint": "^8.57.0",
     "eslint-config-yenz": "^5.4.0",
     "eslint-plugin-node": "^11.1.0",

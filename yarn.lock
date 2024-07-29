@@ -2432,10 +2432,10 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz#14ba83a5d373e3d311e5afca29cf5bfad965bf34"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
-eslint-config-yenz@^5.4.0:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/eslint-config-yenz/-/eslint-config-yenz-5.4.0.tgz#f59afdc0c81aa92de10cfc75b217255cd2801ef1"
-  integrity sha512-rNwqh81J/8Sr799N4LXyI1vWfga0eWBP9tmF6ILQpHMzCrNbmRvA/1SC4BpgWlrjslwwnsfWtFzHeGu5fhctmQ==
+eslint-config-yenz@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/eslint-config-yenz/-/eslint-config-yenz-5.5.0.tgz#771d02e0a2e5e1a01e97c902836f98f75186c98f"
+  integrity sha512-5SVb2P7UB5qJMs5+DmLeIy5C/ngRrf4bxlx6P8bUZgRVzUVA+YDUzvyacuh5E+96H0F2wPDyh0zxf3JrjKKJ2A==
   dependencies:
     "@eslint/js" "^9.3.0"
     "@stylistic/eslint-plugin" "^2.1.0"

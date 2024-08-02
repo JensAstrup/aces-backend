@@ -1,9 +1,10 @@
 import { WebSocket } from 'ws'
 
+import SocketMessage from '@aces/interfaces/socket-message'
 import { roundConnections } from '@aces/socket/setup-websocket'
 
 
-function sendMessageToRound(roundId: string, message: unknown): void {
+function sendMessageToRound(roundId: string, message: SocketMessage): void {
   const connections = roundConnections.get(roundId)
 
   if (connections && connections.size > 0) {

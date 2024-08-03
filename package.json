@@ -2,7 +2,7 @@
   "name": "aces-backend",
   "version": "1.0.0-alpha.6",
   "scripts": {
-    "build": "yarn run generate && npx ts-node build.ts",
+    "build": "npx ts-node build.ts",
     "lint": "npx eslint --ext .ts src/ tests/",
     "lint:tests": "npx eslint --ext .ts tests/",
     "start": "npm run prisma:deploy && node -r module-alias/register ./dist --env=production",

@@ -24,7 +24,7 @@ async function setIssueHandler(request: SetIssueRequest, response: Response): Pr
   const issue = await setIssue(roundId, issueId, decrypt(user.token))
 
   response.status(HttpStatusCodes.NO_CONTENT)
-  sendMessageToRound(roundId, issue)
+  sendMessageToRound(roundId, { type: 'issue', payload: issue, event: 'roundIssueUpdated' })
 }
 
 export default setIssueHandler

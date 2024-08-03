@@ -3,12 +3,18 @@ import { WebSocket } from 'ws'
 
 import { WebSocketCloseCode } from '@aces/common/WebSocketCodes'
 import getLinearIssue from '@aces/linear/get-linear-issue'
+import sendMessageToRound from '@aces/socket/send-message-to-round'
 import decrypt from '@aces/util/encryption/decrypt'
 
 
 const prismaClient = new PrismaClient()
 
-async function sendCurrentIssue(roundId: string, ws: WebSocket): Promise<void> {
+/**
+ * Send the current issue for a round to a WebSocket client, this is used when the connection is first established
+ * @param roundId
+ * @param socket
+ */
+async function sendCurrentIssue(roundId: string, socket: WebSocket): Promise<void> {
   try {
     const round = await prismaClient.round.findUnique({
       where: { id: roundId },
@@ -17,7 +23,7 @@ async function sendCurrentIssue(roundId: string, ws: WebSocket): Promise<void> {
 
     if (!round) {
       console.error(`Round not found: ${roundId}`)
-      ws.close(WebSocketCloseCode.POLICY_VIOLATION, 'Round not found')
+      socket.close(WebSocketCloseCode.POLICY_VIOLATION, 'Round not found')
       return
     }
 
@@ -30,7 +36,7 @@ async function sendCurrentIssue(roundId: string, ws: WebSocket): Promise<void> {
       }
       const issue = await getLinearIssue(issueId, decrypt(round.creator.token))
       if (issue) {
-        ws.send(JSON.stringify(issue))
+        sendMessageToRound(roundId, { type: 'issue', payload: issue, event: 'response' })
       }
     }
   }

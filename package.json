@@ -5,12 +5,14 @@
     "build": "yarn run generate && npx ts-node build.ts",
     "lint": "npx eslint --ext .ts src/ tests/",
     "lint:tests": "npx eslint --ext .ts tests/",
-    "start": "npm run migrate:dev && node -r module-alias/register ./dist --env=production",
+    "start": "npm run prisma:deploy && node -r module-alias/register ./dist --env=production",
     "dev": "dotenvx run -f ./env/development.env -- nodemon",
     "test": "jest --env-file=./env/test.env",
     "test:coverage": "node --env-file ./env/test.env node_modules/.bin/jest --coverage --coverageDirectory=coverage",
-    "migrate:dev": "prisma migrate dev --schema ./src/prisma/schema.prisma",
-    "generate": "prisma generate --schema ./src/prisma/schema.prisma"
+    "prisma:deploy": "npx prisma migrate deploy"
+  },
+  "prisma": {
+    "schema": "./src/prisma/schema.prisma"
   },
   "nodemonConfig": {
     "watch": [

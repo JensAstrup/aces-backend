@@ -1,5 +1,6 @@
 import { WebSocket } from 'ws'
 
+import SocketMessage from '@aces/interfaces/socket-message'
 import sendMessageToRound from '@aces/socket/send-message-to-round'
 import { roundConnections } from '@aces/socket/setup-websocket'
 
@@ -31,7 +32,7 @@ describe('sendMessageToRound', () => {
 
   it('should send message to all open connections', () => {
     const roundId = 'round-1'
-    const message = { text: 'Hello, World!' }
+    const message = { event: 'voteUpdated', payload: {} } as SocketMessage
     const mockWebSocket = createMockWebSocket(WebSocket.OPEN)
 
     roundConnections.set(roundId, new Set([mockWebSocket]))
@@ -47,7 +48,7 @@ describe('sendMessageToRound', () => {
 
     roundConnections.set(roundId, new Set([mockWebSocket]))
 
-    sendMessageToRound(roundId, { text: 'Hello, World!' })
+    sendMessageToRound(roundId, { event: 'voteUpdated', payload: {} })
 
     expect(mockWebSocket.send).not.toHaveBeenCalled()
   })
@@ -56,7 +57,7 @@ describe('sendMessageToRound', () => {
     const roundId = 'round-3'
     const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {})
 
-    sendMessageToRound(roundId, { text: 'Hello, World!' })
+    sendMessageToRound(roundId, { event: 'voteUpdated', payload: {} })
 
     expect(consoleSpy).toHaveBeenCalledWith(`No active connections found for round ${roundId}`)
   })
@@ -68,7 +69,7 @@ describe('sendMessageToRound', () => {
 
     roundConnections.set(roundId, new Set([mockWebSocket]))
 
-    sendMessageToRound(roundId, { text: 'Hello, World!' })
+    sendMessageToRound(roundId, { event: 'voteUpdated', payload: {} })
 
     expect(consoleSpy).toHaveBeenCalledWith(`Client in round ${roundId} not ready. State: ${mockWebSocket.readyState}`)
   })

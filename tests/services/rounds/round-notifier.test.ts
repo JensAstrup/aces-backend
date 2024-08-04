@@ -26,8 +26,9 @@ describe('RoundNotifier', () => {
   let mockSendMessageToRound: jest.Mock
 
   beforeEach(() => {
-    mockRound = { id: 'round-1' } as Round
+    mockRound = { id: 'round-1', creatorId: '13', currentIssueId: 'issue-1', guests: [], issues: [] } as unknown as Round
     mockIssue = { id: 'issue-1' } as Issue
+    // @ts-expect-error mock implementation
     roundNotifier = new RoundNotifier(mockRound)
     mockPrismaClient = new PrismaClient() as unknown as { vote: { findMany: jest.Mock } }
     mockSendMessageToRound = sendMessageToRound as jest.Mock
@@ -58,7 +59,8 @@ describe('RoundNotifier', () => {
       type: 'vote',
       payload: {
         issueId: mockIssue.id,
-        votes: [3, 5]
+        votes: [3, 5],
+        expectedVotes: 1
       }
     }
 
@@ -83,7 +85,8 @@ describe('RoundNotifier', () => {
       type: 'vote',
       payload: {
         issueId: mockIssue.id,
-        votes: []
+        votes: [],
+        expectedVotes: 1
       }
     }
 
@@ -123,7 +126,8 @@ describe('RoundNotifier', () => {
       type: 'vote',
       payload: {
         issueId: mockIssue.id,
-        votes: [1, 3, 5]
+        votes: [1, 3, 5],
+        expectedVotes: 1
       }
     }
 

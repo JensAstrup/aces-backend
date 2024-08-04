@@ -5,6 +5,7 @@ import { WebSocket } from 'ws'
 import { WebSocketCloseCode } from '@aces/common/WebSocketCodes'
 import getLinearIssue from '@aces/linear/get-linear-issue'
 import sendCurrentIssue from '@aces/socket/send-current-issue'
+import sendMessageToRound from '@aces/socket/send-message-to-round'
 import decrypt from '@aces/util/encryption/decrypt'
 
 
@@ -32,9 +33,11 @@ jest.mock('@prisma/client', () => {
 
 jest.mock('@aces/linear/get-linear-issue')
 jest.mock('@aces/util/encryption/decrypt')
+jest.mock('@aces/socket/send-message-to-round')
 
-const mockGetIssue = getLinearIssue as jest.MockedFunction<typeof getLinearIssue>
+const mockGetLinearIssue = getLinearIssue as jest.MockedFunction<typeof getLinearIssue>
 const mockDecrypt = decrypt as jest.MockedFunction<typeof decrypt>
+const mockSendMessageToRound = sendMessageToRound as jest.MockedFunction<typeof sendMessageToRound>
 
 describe('sendCurrentIssue', () => {
   let mockWs: jest.Mocked<WebSocket>
@@ -71,17 +74,13 @@ describe('sendCurrentIssue', () => {
 
     mockPrismaClient.round.findUnique.mockResolvedValue(mockRound)
     mockDecrypt.mockReturnValue('decrypted_token')
-    mockGetIssue.mockResolvedValue(mockIssue)
+    mockGetLinearIssue.mockResolvedValue(mockIssue)
 
     await sendCurrentIssue('round_123', mockWs)
 
-    // expect(mockPrismaClient.round.findUnique).toHaveBeenCalledWith({
-    //   where: { id: 'round_123' },
-    //   include: { creator: true, currentIssue: true }
-    // })
     expect(mockDecrypt).toHaveBeenCalledWith('encrypted_token')
-    expect(mockGetIssue).toHaveBeenCalledWith('issue_123', 'decrypted_token')
-    expect(mockWs.send).toHaveBeenCalledWith(JSON.stringify(mockIssue))
+    expect(mockGetLinearIssue).toHaveBeenCalledWith('issue_123', 'decrypted_token')
+    expect(mockSendMessageToRound).toHaveBeenCalledWith('round_123', { type: 'issue', payload: mockIssue, event: 'response' })
     expect(consoleSpy).toHaveBeenCalledWith('Sending current issue for round round_123')
   })
 
@@ -99,12 +98,12 @@ describe('sendCurrentIssue', () => {
       creator: { token: 'encrypted_token' },
       currentIssue: null
     } as unknown as Round
-
+    mockGetLinearIssue.mockResolvedValue(null)
     mockPrismaClient.round.findUnique.mockResolvedValue(mockRound)
 
     await sendCurrentIssue('round_without_issue', mockWs)
 
-    expect(mockGetIssue).not.toHaveBeenCalled()
-    expect(mockWs.send).not.toHaveBeenCalled()
+    expect(mockGetLinearIssue).not.toHaveBeenCalled()
+    expect(mockSendMessageToRound).not.toHaveBeenCalled()
   })
 })

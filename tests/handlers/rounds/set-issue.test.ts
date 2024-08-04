@@ -77,7 +77,7 @@ describe('setIssueHandler', () => {
 
     expect(decrypt).toHaveBeenCalledWith(mockUser.token)
     expect(setIssue).toHaveBeenCalledWith(mockRequest.params?.roundId, mockRequest.body.issue, decryptedToken)
-    expect(sendMessageToRound).toHaveBeenCalledWith(mockRequest.params?.roundId, mockIssue)
+    expect(sendMessageToRound).toHaveBeenCalledWith(mockRequest.params?.roundId, { type: 'issue', payload: mockIssue, event: 'roundIssueUpdated' })
     expect(mockStatus).toHaveBeenCalledWith(HttpStatusCodes.NO_CONTENT)
   })
 })

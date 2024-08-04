@@ -18,9 +18,12 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       release_id: ${{ steps.create_or_update_draft_release.outputs.release_id }}
+      tag_name: ${{ steps.extract_tag.outputs.tag_name }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -33,7 +36,12 @@ jobs:
       - name: Extract tag name
         id: extract_tag
         run: |
-          echo "VERSION=${{ github.event.pull_request.title }}" >> $GITHUB_ENV
+          TAG_NAME=$(echo "${{ github.event.pull_request.title }}" | grep -oP '^\d+\.\d+\.\d+(-[a-zA-Z0-9.]+)?$' || echo "")
+          if [ -z "$TAG_NAME" ]; then
+            echo "Invalid tag format in PR title. Expected format: X.Y.Z or X.Y.Z-suffix"
+            exit 1
+          fi
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Create or update draft release
         id: create_or_update_draft_release
@@ -43,15 +51,44 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const pr = context.payload.pull_request;
-            const releaseTag = pr.title;
+            const releaseTag = '${{ steps.extract_tag.outputs.tag_name }}';
             const releaseNotes = pr.body;
-            const releases = await github.rest.repos.listReleases({
-              owner,
-              repo,
-            });
+            
+            // Check if the tag already exists
+            try {
+              await github.rest.git.getRef({
+                owner,
+                repo,
+                ref: `tags/${releaseTag}`,
+              });
+              console.log(`Tag ${releaseTag} already exists`);
+            } catch (error) {
+              if (error.status === 404) {
+                // Create the tag
+                const latestCommit = await github.rest.repos.getCommit({
+                  owner,
+                  repo,
+                  ref: pr.head.sha,
+                });
+                
+                await github.rest.git.createRef({
+                  owner,
+                  repo,
+                  ref: `refs/tags/${releaseTag}`,
+                  sha: latestCommit.data.sha,
+                });
+                console.log(`Created tag ${releaseTag}`);
+              } else {
+                throw error;
+              }
+            }
+            
+            // Now create or update the release
+            const releases = await github.rest.repos.listReleases({ owner, repo });
             let draftRelease = releases.data.find(release => release.tag_name === releaseTag && release.draft === true);
+            
             if (!draftRelease) {
-              console.log(`Creating draft release`);
+              console.log(`Creating draft release for ${releaseTag}`);
               draftRelease = await github.rest.repos.createRelease({
                 owner,
                 repo,
@@ -62,7 +99,7 @@ jobs:
               });
               console.log(`Draft release created`);
             } else {
-              console.log(`Updating draft release`);
+              console.log(`Updating draft release for ${releaseTag}`);
               draftRelease = await github.rest.repos.updateRelease({
                 owner,
                 repo,
@@ -72,7 +109,7 @@ jobs:
               });
               console.log(`Draft release updated`);
             }
-            core.setOutput("release_id", draftRelease.id);
+            core.setOutput("release_id", draftRelease.data.id);
 
   publish_release:
     needs: draft_release
@@ -85,15 +122,10 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const { owner, repo } = context.repo;
-            const pr = context.payload.pull_request;
-            const releases = await github.rest.repos.listReleases({
-              owner,
-              repo,
-            });
-            const releaseTag = pr.title;
-            let draftRelease = releases.data.find(release => release.tag_name === releaseTag && release.draft === true);
-            if (draftRelease) {
-              const releaseId = draftRelease.id;
+            const releaseTag = '${{ needs.draft_release.outputs.tag_name }}';
+            const releaseId = '${{ needs.draft_release.outputs.release_id }}';
+            
+            if (releaseId) {
               console.log(`Releasing draft release: https://github.com/${owner}/${repo}/releases/tag/${releaseTag}`);
               await github.rest.repos.updateRelease({
                 owner,

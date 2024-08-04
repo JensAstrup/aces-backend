@@ -8,7 +8,10 @@ import sendMessageToRound from '@aces/socket/send-message-to-round'
 jest.mock('@prisma/client', () => {
   const mockPrismaClient = {
     vote: {
-      findMany: jest.fn()
+      findMany: jest.fn(),
+    },
+    round: {
+      findUnique: jest.fn()
     }
   }
   return {
@@ -22,17 +25,38 @@ describe('RoundNotifier', () => {
   let roundNotifier: RoundNotifier
   let mockRound: Round
   let mockIssue: Issue
-  let mockPrismaClient: { vote: { findMany: jest.Mock } }
+  let mockPrismaClient: { vote: { findMany: jest.Mock }, round: { findUnique: jest.Mock } }
   let mockSendMessageToRound: jest.Mock
 
   beforeEach(() => {
-    mockRound = { id: 'round-1' } as Round
+    mockRound = { id: 'round-1', creatorId: '13', currentIssueId: 'issue-1', guests: [], issues: [] } as unknown as Round
     mockIssue = { id: 'issue-1' } as Issue
+    // @ts-expect-error mock implementation
     roundNotifier = new RoundNotifier(mockRound)
-    mockPrismaClient = new PrismaClient() as unknown as { vote: { findMany: jest.Mock } }
+    mockPrismaClient = new PrismaClient() as unknown as { vote: { findMany: jest.Mock }, round: { findUnique: jest.Mock } }
     mockSendMessageToRound = sendMessageToRound as jest.Mock
 
     jest.clearAllMocks()
+  })
+
+  it('should return round with relations when get is called', async () => {
+    const mockRoundWithRelations = { ...mockRound, guests: [], issues: [] } as Round
+
+    mockPrismaClient.round.findUnique.mockResolvedValue(mockRoundWithRelations)
+
+    const round = await RoundNotifier.get(mockRound.id)
+
+    expect(mockPrismaClient.round.findUnique).toHaveBeenCalledWith({
+      where: {
+        id: mockRound.id
+      },
+      include: {
+        guests: true,
+        issues: true
+      }
+    })
+
+    expect(round).toEqual(mockRoundWithRelations)
   })
 
   it('should fetch votes, map them correctly, and send a message when voteSet is called', async () => {
@@ -58,7 +82,8 @@ describe('RoundNotifier', () => {
       type: 'vote',
       payload: {
         issueId: mockIssue.id,
-        votes: [3, 5]
+        votes: [3, 5],
+        expectedVotes: 1
       }
     }
 
@@ -83,7 +108,8 @@ describe('RoundNotifier', () => {
       type: 'vote',
       payload: {
         issueId: mockIssue.id,
-        votes: []
+        votes: [],
+        expectedVotes: 1
       }
     }
 
@@ -123,7 +149,8 @@ describe('RoundNotifier', () => {
       type: 'vote',
       payload: {
         issueId: mockIssue.id,
-        votes: [1, 3, 5]
+        votes: [1, 3, 5],
+        expectedVotes: 1
       }
     }
 

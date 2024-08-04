@@ -1,6 +1,6 @@
 {
   "name": "aces-backend",
-  "version": "1.0.0-alpha.7",
+  "version": "1.0.0-alpha.8",
   "scripts": {
     "build": "npx ts-node build.ts",
     "lint": "npx eslint --ext .ts src/ tests/",
@@ -39,7 +39,7 @@
     "express": "^4.19.2",
     "express-async-errors": "^3.1.1",
     "helmet": "^7.1.0",
-    "inserturlparams": "^1.1.2",
+    "inserturlparams": "^2.0.1",
     "jsonfile": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
     "module-alias": "^2.2.3",
@@ -70,7 +70,7 @@
     "@typescript-eslint/eslint-plugin": "^7.16.1",
     "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.57.0",
-    "eslint-config-yenz": "^5.6.0",
+    "eslint-config-yenz": "^5.7.0",
     "eslint-plugin-node": "^11.1.0",
     "find": "^0.3.0",
     "fs-extra": "^11.2.0",

@@ -46,7 +46,6 @@ describe('setVoteHandler', () => {
     mockSetVote = setVote as jest.MockedFunction<typeof setVote>
     MockedRoundNotifier = RoundNotifier as jest.Mocked<typeof RoundNotifier>
 
-    // Reset mocks
     jest.clearAllMocks()
   })
 

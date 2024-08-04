@@ -13,6 +13,7 @@ interface SocketMessage {
 interface VoteUpdatedPayload {
     issueId: string
     votes: number[]
+    expectedVotes: number
 }
 
 interface VoteUpdatedMessage extends SocketMessage {

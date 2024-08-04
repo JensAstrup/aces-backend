@@ -1,8 +1,6 @@
-import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
-import getIssue from '@aces/services/issues/get-issue'
 import RoundNotifier from '@aces/services/rounds/round-notifier'
 import setVote from '@aces/services/rounds/set-vote'
 import canAccessRound from '@aces/util/can-access-round'
@@ -21,15 +19,14 @@ async function setVoteHandler(request: Request, response: Response): Promise<voi
     response.status(HttpStatusCodes.FORBIDDEN).json({ error: 'Forbidden' })
     return
   }
-  const prisma = new PrismaClient()
-  const round = await prisma.round.findUnique({ where: { id: roundId }, })
+  const round = await RoundNotifier.get(roundId)
   if (!round) {
     response.status(HttpStatusCodes.NOT_FOUND).json({ error: 'Round not found' })
     return
   }
-  await setVote(roundId, issueId, vote, user)
   const roundNotifier = new RoundNotifier(round)
-  const issue = await getIssue({ roundId, linearId: issueId })
+  await setVote(roundId, issueId, vote, user)
+  const issue = round.issues.find(issue => issue.linearId === issueId)
   if (!issue) {
     response.status(HttpStatusCodes.NOT_FOUND).json({ error: 'Issue not found' })
     return

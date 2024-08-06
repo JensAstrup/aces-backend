@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
-import endRound from '@aces/services/auth/end-round'
-import removeGuestFromRound from '@aces/services/auth/remove-guest-from-round'
+import endRound from '@aces/services/rounds/end-round'
+import removeGuestFromRound from '@aces/services/rounds/remove-guest-from-round'
 import canAccessRound from '@aces/util/can-access-round'
 
 

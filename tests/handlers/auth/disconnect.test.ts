@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
 
 import disconnect from '@aces/handlers/auth/disconnect'
-import endRound from '@aces/services/auth/end-round'
-import removeGuestFromRound from '@aces/services/auth/remove-guest-from-round'
+import endRound from '@aces/services/rounds/end-round'
+import removeGuestFromRound from '@aces/services/rounds/remove-guest-from-round'
 import canAccessRound from '@aces/util/can-access-round'
 
 
@@ -24,8 +24,8 @@ jest.mock('@prisma/client', () => {
 
 
 jest.mock('@aces/util/can-access-round')
-jest.mock('@aces/services/auth/end-round')
-jest.mock('@aces/services/auth/remove-guest-from-round')
+jest.mock('@aces/services/rounds/end-round')
+jest.mock('@aces/services/rounds/remove-guest-from-round')
 
 const mockCanAccessRound = canAccessRound as jest.MockedFunction<typeof canAccessRound>
 const mockEndRound = endRound as jest.MockedFunction<typeof endRound>

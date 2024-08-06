@@ -64,8 +64,8 @@ model Round {
 model RoundGuest {
   user    User   @relation(fields: [userId], references: [id])
   userId  String
-  round   Round  @relation(fields: [roundId], references: [id])
-  roundId String
+  round   Round?  @relation(fields: [roundId], references: [id])
+  roundId String?
 
-  @@id([userId, roundId])
+  @@id([userId])
 }

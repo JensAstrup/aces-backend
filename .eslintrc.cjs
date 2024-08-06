@@ -58,7 +58,8 @@ module.exports = {
     {
       files: ["**/*.test.*"],
       rules: {
-        "no-magic-numbers": "off"
+        "no-magic-numbers": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
       }
     }
   ]

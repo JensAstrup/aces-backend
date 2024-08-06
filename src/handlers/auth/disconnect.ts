@@ -1,7 +1,9 @@
-import { PrismaClient, Round, User } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
+import endRound from '@aces/services/auth/end-round'
+import removeGuestFromRound from '@aces/services/auth/remove-guest-from-round'
 import canAccessRound from '@aces/util/can-access-round'
 
 
@@ -13,33 +15,6 @@ interface DisconnectRequest extends Request {
 
 const prisma = new PrismaClient()
 
-
-async function endRound(round: Round): Promise<void> {
-  await prisma.round.update({
-    where: {
-      id: round.id
-    },
-    data: {
-      status: 'FINISHED'
-    }
-  })
-}
-
-
-async function removeGuestFromRound(round: Round, user: User): Promise<void> {
-  await prisma.round.update({
-    where: {
-      id: round.id
-    },
-    data: {
-      guests: {
-        disconnect: {
-          userId: user.id,
-        }
-      }
-    }
-  })
-}
 
 async function disconnect(request: DisconnectRequest, response: Response): Promise<void> {
   const token = request.headers.authorization

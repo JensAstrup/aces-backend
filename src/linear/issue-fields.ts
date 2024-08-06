@@ -6,6 +6,7 @@ export const issueFields = `id
           creator {
             id
             name
+            displayName
           }
           team {
             id

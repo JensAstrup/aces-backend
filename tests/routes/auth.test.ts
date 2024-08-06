@@ -7,7 +7,6 @@ describe('round routes', () => {
   it('should create a round route', () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const authRouter = require('@aces/routes/auth').default
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
 
     expect(authRouter).toBeInstanceOf(Function)
     expect(authRouter.stack).toHaveLength(3)

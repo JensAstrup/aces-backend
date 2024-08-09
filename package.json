@@ -31,6 +31,8 @@
     "@dotenvx/dotenvx": "^1.6.4",
     "@linear/sdk": "^26.0.0",
     "@prisma/client": "5.17.0",
+    "@sentry/node": "^8.25.0",
+    "@sentry/profiling-node": "^8.25.0",
     "axios": "^1.7.3",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
@@ -79,8 +81,8 @@
     "nodemon": "^3.1.4",
     "prisma": "^5.17.0",
     "supertest": "^7.0.0",
-    "ts-node": "^10.9.2",
     "ts-jest": "^29.2.3",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.5.4"
   },

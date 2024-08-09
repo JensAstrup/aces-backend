@@ -3,3 +3,4 @@
  * server is started. This is useful for environment variables, command-line
  * arguments, and cron-jobs.
  */
+import './instrument'

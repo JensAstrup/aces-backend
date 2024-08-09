@@ -1,15 +1,22 @@
 {
   "name": "aces-backend",
-  "version": "1.0.0-alpha.9",
+  "version": "1.0.0-alpha.10",
   "scripts": {
     "build": "npx ts-node build.ts",
+    "build:prod": "NODE_ENV=production yarn build && yarn sentry:sourcemaps && yarn cleanup:sourcemaps",
     "lint": "npx eslint --ext .ts src/ tests/",
     "lint:tests": "npx eslint --ext .ts tests/",
-    "start": "npm run prisma:deploy && node -r module-alias/register ./dist --env=production",
+    "start": "yarn prisma:deploy && node -r module-alias/register ./dist --env=production",
     "dev": "dotenvx run -f ./env/development.env -- nodemon",
     "test": "jest --env-file=./env/test.env",
     "test:coverage": "node --env-file ./env/test.env node_modules/.bin/jest --coverage --coverageDirectory=coverage",
-    "prisma:deploy": "npx prisma migrate deploy"
+    "prisma:deploy": "npx prisma migrate deploy",
+    "sentry:new-release": "sentry-cli releases new $npm_package_version",
+    "sentry:inject": "sentry-cli sourcemaps inject --org jens-astrup --project ace-of-spades ./dist",
+    "sentry:upload": "sentry-cli sourcemaps upload --org jens-astrup --project ace-of-spades --release=$npm_package_version ./dist",
+    "sentry:finalize": "sentry-cli releases finalize $npm_package_version",
+    "sentry:sourcemaps": "yarn sentry:new-release && yarn sentry:inject && yarn sentry:upload && yarn sentry:finalize",
+    "cleanup:sourcemaps": "find ./dist -name '*.map' -type f -delete"
   },
   "prisma": {
     "schema": "./src/prisma/schema.prisma"
@@ -31,6 +38,9 @@
     "@dotenvx/dotenvx": "^1.6.4",
     "@linear/sdk": "^26.0.0",
     "@prisma/client": "5.17.0",
+    "@sentry/cli": "^2.33.1",
+    "@sentry/node": "^8.25.0",
+    "@sentry/profiling-node": "^8.25.0",
     "axios": "^1.7.3",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
@@ -79,8 +89,8 @@
     "nodemon": "^3.1.4",
     "prisma": "^5.17.0",
     "supertest": "^7.0.0",
-    "ts-node": "^10.9.2",
     "ts-jest": "^29.2.3",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.5.4"
   },

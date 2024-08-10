@@ -2,8 +2,8 @@
   "name": "aces-backend",
   "version": "1.0.0-alpha.11",
   "scripts": {
-    "build": "npx ts-node build.ts",
-    "build:prod": "NODE_ENV=production npm run build && npm run sentry:sourcemaps && npm run cleanup:sourcemaps",
+    "build-base": "npx ts-node build.ts",
+    "build": "NODE_ENV=production npm run build-base && npm run sentry:sourcemaps && npm run cleanup:sourcemaps",
     "lint": "npx eslint --ext .ts src/ tests/",
     "lint:tests": "npx eslint --ext .ts tests/",
     "start": "yarn prisma:deploy && node -r module-alias/register ./dist --env=production",

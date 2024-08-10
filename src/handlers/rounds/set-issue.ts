@@ -25,6 +25,7 @@ async function setIssueHandler(request: SetIssueRequest, response: Response): Pr
 
   response.status(HttpStatusCodes.NO_CONTENT)
   sendMessageToRound(roundId, { type: 'issue', payload: issue, event: 'roundIssueUpdated' })
+  response.send()
 }
 
 export default setIssueHandler

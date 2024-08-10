@@ -11,7 +11,7 @@
     "test": "jest --env-file=./env/test.env",
     "test:coverage": "node --env-file ./env/test.env node_modules/.bin/jest --coverage --coverageDirectory=coverage",
     "prisma:deploy": "npx prisma migrate deploy",
-    "sentry:new-release": "sentry-cli releases new $npm_package_version",
+    "sentry:new-release": "sentry-cli releases new --project ace-of-spades $npm_package_version",
     "sentry:inject": "sentry-cli sourcemaps inject --org jens-astrup --project ace-of-spades ./dist",
     "sentry:upload": "sentry-cli sourcemaps upload --org jens-astrup --project ace-of-spades --release=$npm_package_version ./dist",
     "sentry:finalize": "sentry-cli releases finalize $npm_package_version",

@@ -1,3 +1,4 @@
+import { Issue } from '@linear/sdk'
 import { User } from '@prisma/client'
 import { Request, Response } from 'express'
 
@@ -11,6 +12,9 @@ import decrypt from '@aces/util/encryption/decrypt'
 jest.mock('@aces/services/rounds/set-issue')
 jest.mock('@aces/socket/send-message-to-round')
 jest.mock('@aces/util/encryption/decrypt')
+
+const mockSetIssue = setIssue as jest.MockedFunction<typeof setIssue>
+const mockDecrypt = decrypt as jest.MockedFunction<typeof decrypt>
 
 describe('setIssueHandler', () => {
   let mockRequest: Partial<Request>
@@ -68,10 +72,10 @@ describe('setIssueHandler', () => {
   })
 
   it('should set issue and send message to round', async () => {
-    const decryptedToken = 'decrypted-token';
-    (decrypt as jest.Mock).mockReturnValue(decryptedToken)
-    const mockIssue = { id: 'test-issue-id', linearId: 'test-linear-id', title: 'Test Issue' };
-    (setIssue as jest.Mock).mockResolvedValue(mockIssue)
+    const decryptedToken = 'decrypted-token'
+    mockDecrypt.mockReturnValue(decryptedToken)
+    const mockIssue = { id: 'test-issue-id', linearId: 'test-linear-id', title: 'Test Issue' } as unknown as Issue
+    mockSetIssue.mockResolvedValue(mockIssue)
 
     await setIssueHandler(mockRequest as Request, mockResponse as Response)
 
@@ -79,5 +83,6 @@ describe('setIssueHandler', () => {
     expect(setIssue).toHaveBeenCalledWith(mockRequest.params?.roundId, mockRequest.body.issue, decryptedToken)
     expect(sendMessageToRound).toHaveBeenCalledWith(mockRequest.params?.roundId, { type: 'issue', payload: mockIssue, event: 'roundIssueUpdated' })
     expect(mockStatus).toHaveBeenCalledWith(HttpStatusCodes.NO_CONTENT)
+    expect(mockSend).toHaveBeenCalled()
   })
 })

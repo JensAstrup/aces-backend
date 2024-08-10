@@ -1,9 +1,9 @@
 {
   "name": "aces-backend",
-  "version": "1.0.0-alpha.10",
+  "version": "1.0.0-alpha.11",
   "scripts": {
     "build": "npx ts-node build.ts",
-    "build:prod": "NODE_ENV=production yarn build && yarn sentry:sourcemaps && yarn cleanup:sourcemaps",
+    "build:prod": "NODE_ENV=production npm run build && npm run sentry:sourcemaps && npm run cleanup:sourcemaps",
     "lint": "npx eslint --ext .ts src/ tests/",
     "lint:tests": "npx eslint --ext .ts tests/",
     "start": "yarn prisma:deploy && node -r module-alias/register ./dist --env=production",
@@ -15,7 +15,7 @@
     "sentry:inject": "sentry-cli sourcemaps inject --org jens-astrup --project ace-of-spades ./dist",
     "sentry:upload": "sentry-cli sourcemaps upload --org jens-astrup --project ace-of-spades --release=$npm_package_version ./dist",
     "sentry:finalize": "sentry-cli releases finalize $npm_package_version",
-    "sentry:sourcemaps": "yarn sentry:new-release && yarn sentry:inject && yarn sentry:upload && yarn sentry:finalize",
+    "sentry:sourcemaps": "npm run sentry:new-release && npm run sentry:inject && npm run sentry:upload && yarn sentry:finalize",
     "cleanup:sourcemaps": "find ./dist -name '*.map' -type f -delete"
   },
   "prisma": {

@@ -15,6 +15,9 @@ async function getIssue({ roundId, issueId, linearId }: GetIssueParams): Promise
       where: {
         id: issueId,
         roundId: roundId
+      },
+      include: {
+        votes: true
       }
     })
   }
@@ -23,6 +26,9 @@ async function getIssue({ roundId, issueId, linearId }: GetIssueParams): Promise
       where: {
         linearId: linearId,
         roundId: roundId
+      },
+      include: {
+        votes: true
       }
     })
   }

@@ -1,8 +1,9 @@
-import { PrismaClient } from '@prisma/client'
+import { Issue, PrismaClient } from '@prisma/client'
 import { WebSocket } from 'ws'
 
 import { WebSocketCloseCode } from '@aces/common/WebSocketCodes'
 import getLinearIssue from '@aces/linear/get-linear-issue'
+import getIssueVotes from '@aces/services/issues/get-issue-votes'
 import sendMessageToRound from '@aces/socket/send-message-to-round'
 import decrypt from '@aces/util/encryption/decrypt'
 
@@ -27,16 +28,18 @@ async function sendCurrentIssue(roundId: string, socket: WebSocket): Promise<voi
       return
     }
 
-    if (round.currentIssue) {
-      console.log(`Sending current issue for round ${roundId}`)
-      const issueId: string | null = round.currentIssue.linearId
+    const currentIssue: Issue | null = round.currentIssue
+    if (currentIssue) {
+      const issueId: string | null = currentIssue.linearId
       if (!issueId) {
         console.error(`No issue ID found for current issue in round ${roundId}`)
         return
       }
       const issue = await getLinearIssue(issueId, decrypt(round.creator.token))
+      const issueVotes = await getIssueVotes(currentIssue)
+      const votes = issueVotes.map(vote => vote.vote)
       if (issue) {
-        sendMessageToRound(roundId, { type: 'issue', payload: issue, event: 'response' })
+        sendMessageToRound(roundId, { type: 'issue', payload: { issue, votes }, event: 'response' })
       }
     }
   }

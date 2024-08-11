@@ -38,6 +38,9 @@ describe('getIssue', () => {
       where: {
         id: 'issue-1',
         roundId: 'round-1'
+      },
+      include: {
+        votes: true
       }
     })
     expect(mockPrismaClient.issue.findFirst).not.toHaveBeenCalled()
@@ -54,6 +57,9 @@ describe('getIssue', () => {
       where: {
         linearId: 'linear-1',
         roundId: 'round-1'
+      },
+      include: {
+        votes: true
       }
     })
     expect(mockPrismaClient.issue.findUnique).not.toHaveBeenCalled()
@@ -69,6 +75,9 @@ describe('getIssue', () => {
       where: {
         id: 'non-existent',
         roundId: 'round-1'
+      },
+      include: {
+        votes: true
       }
     })
   })
@@ -83,6 +92,9 @@ describe('getIssue', () => {
       where: {
         linearId: 'non-existent',
         roundId: 'round-1'
+      },
+      include: {
+        votes: true
       }
     })
   })

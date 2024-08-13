@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 
-import getUser from '@aces/services/auth/get-or-create-user'
+import getUserFromSession from '@aces/services/auth/get-user-from-session'
 
 
 async function setUser(request: Request, response: Response, next: NextFunction): Promise<void> {
   const token = request.headers.authorization
   if (token) {
-    request.user = await getUser(token)
+    request.user = await getUserFromSession(token)
   }
   else {
     request.user = null

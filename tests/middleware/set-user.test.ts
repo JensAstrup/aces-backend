@@ -2,11 +2,11 @@ import { User } from '@prisma/client'
 import { Request, Response } from 'express'
 
 import setUser from '@aces/middleware/set-user'
-import getUser from '@aces/services/auth/get-or-create-user'
+import getUserFromSession from '@aces/services/auth/get-user-from-session'
 
 
-jest.mock('@aces/services/auth/get-or-create-user')
-const mockGetUser = getUser as jest.MockedFunction<typeof getUser>
+jest.mock('@aces/services/auth/get-user-from-session')
+const mockGetUser = getUserFromSession as jest.MockedFunction<typeof getUserFromSession>
 
 describe('setUser', () => {
   it('should set user on request', async () => {

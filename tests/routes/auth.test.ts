@@ -1,6 +1,6 @@
 import anonymousRegistration from '@aces/handlers/auth/anonymous-registration'
-import authorize from '@aces/handlers/auth/authorize'
 import disconnect from '@aces/handlers/auth/disconnect'
+import exchange from '@aces/handlers/auth/exchange'
 
 
 describe('round routes', () => {
@@ -16,8 +16,8 @@ describe('round routes', () => {
     expect(authRouter.stack[1].route.path).toEqual('/disconnect')
     expect(authRouter.stack[1].route.methods.post).toBeTruthy()
     expect(authRouter.stack[1].route.stack[0].handle).toEqual(disconnect)
-    expect(authRouter.stack[2].route.path).toEqual('/')
+    expect(authRouter.stack[2].route.path).toEqual('/exchange')
     expect(authRouter.stack[2].route.methods.post).toBeTruthy()
-    expect(authRouter.stack[2].route.stack[0].handle).toEqual(authorize)
+    expect(authRouter.stack[2].route.stack[0].handle).toEqual(exchange)
   })
 })

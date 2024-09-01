@@ -13,9 +13,9 @@ async function setVoteHandler(request: Request, response: Response): Promise<voi
   }
   const { roundId } = request.params
   const { issueId, vote } = request.body
-  const user = request.user
+  const user = request.session.user
   const isAuthorized = await canAccessRound(roundId, request.user)
-  if (!isAuthorized) {
+  if (!user || !isAuthorized) {
     response.status(HttpStatusCodes.FORBIDDEN).json({ error: 'Forbidden' })
     return
   }

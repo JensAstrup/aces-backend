@@ -35,7 +35,7 @@ async function sendCurrentIssue(roundId: string, socket: WebSocket): Promise<voi
         console.error(`No issue ID found for current issue in round ${roundId}`)
         return
       }
-      const issue = await getLinearIssue(issueId, decrypt(round.creator.token))
+      const issue = await getLinearIssue(issueId, decrypt(round.creator.token!))
       const issueVotes = await getIssueVotes(currentIssue)
       const votes = issueVotes.map(vote => vote.vote)
       if (issue) {

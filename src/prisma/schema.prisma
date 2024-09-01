@@ -12,12 +12,26 @@ model User {
   linearId       String?      @unique
   email          String?      @unique
   displayName    String?
-  token          String       @unique
+  token          String?      @unique
   created_rounds Round[]
   joined_rounds  RoundGuest[]
   votes          Vote[]
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  sessions       Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  user      User?     @relation(fields: [userId], references: [id])
+  userId    String?
+  expiresAt DateTime
+  data      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([expiresAt], name: "idx_expiresAt")
 }
 
 model Vote {
@@ -34,7 +48,7 @@ model Vote {
 
 model Issue {
   id           String  @id @default(cuid())
-  linearId     String?
+  linearId     String
   round        Round   @relation(fields: [roundId], references: [id])
   roundId      String
   votes        Vote[]
@@ -62,7 +76,7 @@ model Round {
 }
 
 model RoundGuest {
-  user    User   @relation(fields: [userId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
   userId  String
   round   Round?  @relation(fields: [roundId], references: [id])
   roundId String?

@@ -19,14 +19,15 @@ describe('authorize', () => {
       body: {
         code: '123456',
       },
+      session: {}
     } as unknown as IncomingAccessTokenRequest
     const json = jest.fn()
     const response = {
-      status: jest.fn().mockReturnValue({ json }),
+      status: jest.fn().mockReturnValue({ json, send: jest.fn() }),
     } as unknown as Response
     await authorize(request, response)
-    expect(response.status).toHaveBeenCalledWith(200)
-    expect(json).toHaveBeenCalledWith({ accessToken: 'abcdef' })
+    expect(response.status).toHaveBeenCalledWith(204)
+    expect(request.session.user).toEqual({ token: 'abcdef' })
   })
 
   it('should return an error message', async () => {
@@ -34,6 +35,7 @@ describe('authorize', () => {
       body: {
         code: '123456',
       },
+      session: {}
     } as unknown as IncomingAccessTokenRequest
     const json = jest.fn()
     const response = {

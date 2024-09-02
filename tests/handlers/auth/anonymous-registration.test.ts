@@ -6,11 +6,6 @@ import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import anonymousRegistration from '@aces/handlers/auth/anonymous-registration'
 import encrypt from '@aces/util/encryption/encrypt'
 
-// Mock dependencies
-jest.mock('uuid')
-jest.mock('@aces/util/encryption/encrypt')
-const mockUuidv7 = uuidv7 as jest.MockedFunction<typeof uuidv7>
-const mockEncrypt = encrypt as jest.MockedFunction<typeof encrypt>
 
 jest.mock('@prisma/client', () => {
   const mockPrismaClient = {
@@ -45,14 +40,14 @@ describe('anonymousRegistration', () => {
 
   beforeEach(() => {
     mockRequest = {
+      // @ts-expect-error We're just mocking the properties we need
+      session: {},
       body: { roundId: 'test-round-id' }
     }
     mockResponse = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn()
     }
-    mockUuidv7.mockReturnValue('mock-uuid')
-    mockEncrypt.mockReturnValue('encrypted-token')
   })
 
   afterEach(() => {
@@ -60,17 +55,13 @@ describe('anonymousRegistration', () => {
   })
 
   it('should create a new user and add them as a guest to the round', async () => {
-    const mockUser = { id: 'test-user-id', token: 'encrypted-token' }
+    const mockUser = { id: 'test-user-id' }
     mockPrismaClient.user.create.mockResolvedValue(mockUser)
     mockPrismaClient.round.update.mockResolvedValue({ id: 'test-round-id' })
 
     await anonymousRegistration(mockRequest as Request, mockResponse as Response)
 
-    expect(uuidv7).toHaveBeenCalledTimes(1)
-    expect(encrypt).toHaveBeenCalledWith('anonymous-mock-uuid')
-    expect(mockPrismaClient.user.create).toHaveBeenCalledWith({
-      data: { token: 'encrypted-token' }
-    })
+    expect(mockPrismaClient.user.create).toHaveBeenCalledWith({ data: { } })
     expect(mockPrismaClient.round.update).toHaveBeenCalledWith({
       where: { id: 'test-round-id' },
       data: {

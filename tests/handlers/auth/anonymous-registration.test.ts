@@ -1,10 +1,8 @@
 import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
-import { v7 as uuidv7 } from 'uuid'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
 import anonymousRegistration from '@aces/handlers/auth/anonymous-registration'
-import encrypt from '@aces/util/encryption/encrypt'
 
 
 jest.mock('@prisma/client', () => {
@@ -22,7 +20,7 @@ jest.mock('@prisma/client', () => {
 
   return {
     PrismaClient: jest.fn().mockImplementation(() => mockPrismaClient),
-    User: jest.fn() // Mocking the User type
+    User: jest.fn()
   }
 })
 

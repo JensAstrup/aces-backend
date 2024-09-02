@@ -9,7 +9,7 @@ class PrismaSessionStore extends Store {
     super()
   }
 
-  public async get(sid: string, callback: (err: any, session?: SessionData | null) => void): Promise<void> {
+  public async get(sid: string, callback: (err: Error | null, session?: SessionData | null) => void): Promise<void> {
     try {
       const session = await prisma.session.findUnique({
         where: { id: sid },

@@ -5,7 +5,6 @@ import { SessionData, Store } from 'express-session'
 const prisma = new PrismaClient()
 
 class PrismaSessionStore extends Store {
-
   public async get(sid: string, callback: (err: Error | null, session?: SessionData | null) => void): Promise<void> {
     try {
       const session = await prisma.session.findUnique({

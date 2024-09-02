@@ -1,9 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
-import { v7 as uuidv7 } from 'uuid'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
-import encrypt from '@aces/util/encryption/encrypt'
 
 
 const prisma = new PrismaClient()

@@ -16,7 +16,7 @@ async function authorize(request: IncomingAccessTokenRequest, response: Response
   const accessToken = await exchangeCode(request.body.code)
   const user = await createUser(accessToken)
   request.session.user = user
-  response.status(HttpStatusCodes.NO_CONTENT)
+  response.status(HttpStatusCodes.NO_CONTENT).send()
 }
 
 export default authorize

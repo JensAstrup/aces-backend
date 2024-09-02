@@ -33,13 +33,13 @@ class PrismaSessionStore extends Store {
         where: { id: sid },
         update: {
           data: JSON.stringify(sessionData),
-          userId: sessionData.user.id, // Assuming user.id is the user's primary key
+          userId: sessionData.user?.id,
           expiresAt: new Date(sessionData.cookie.expires || Date.now()),
         },
         create: {
           id: sid,
           data: JSON.stringify(sessionData),
-          userId: sessionData.user.id,
+          userId: sessionData.user?.id,
           expiresAt: new Date(sessionData.cookie.expires || Date.now()),
         },
       })

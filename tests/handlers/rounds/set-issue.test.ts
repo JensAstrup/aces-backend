@@ -78,6 +78,28 @@ describe('setIssueHandler', () => {
     expect(mockSend).toHaveBeenCalledWith('Unauthorized')
   })
 
+  it('should return 401 Unauthorized if user.token is missing', async () => {
+    mockRequest = {
+      session: {
+        // @ts-expect-error Property is missing intentionally
+        user: {
+          linearId: 'some-linear-id',
+        },
+      },
+      params: {
+        roundId: 'some-round-id',
+      },
+      body: {
+        issue: 'some-issue-id',
+      },
+    }
+
+    await setIssueHandler(mockRequest as Request, mockResponse as Response)
+
+    expect(mockStatus).toHaveBeenCalledWith(HttpStatusCodes.UNAUTHORIZED)
+    expect(mockSend).toHaveBeenCalled()
+  })
+
   it('should return 401 if user does not have a linearId', async () => {
     mockRequest.session!.user = { ...mockUser, linearId: undefined } as unknown as User
 

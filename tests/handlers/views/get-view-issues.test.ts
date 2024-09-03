@@ -39,7 +39,21 @@ describe('getIssues', () => {
     } as unknown as Response
     await getIssues(request, response)
     expect(response.status).toHaveBeenCalledWith(401)
-    expect(response.send).toHaveBeenCalledWith('Unauthorized')
+    expect(response.send).toHaveBeenCalled()
+  })
+
+  it('should return 401 if user has no token', async () => {
+    const request = {
+      session: { user: {}, },
+      query: {}
+    } as unknown as Request
+    const response = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    } as unknown as Response
+    await getIssues(request, response)
+    expect(response.status).toHaveBeenCalledWith(401)
+    expect(response.send).toHaveBeenCalled()
   })
 
   it('should return issues', async () => {

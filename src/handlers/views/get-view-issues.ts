@@ -12,7 +12,7 @@ async function getIssues(request: Request, response: Response): Promise<void> {
 
   const user = request.session.user
   if (!user) {
-    response.status(HttpStatusCodes.UNAUTHORIZED).send('Unauthorized')
+    response.status(HttpStatusCodes.UNAUTHORIZED).send()
     return
   }
   const nextPage = request.query.nextPage

@@ -1,5 +1,7 @@
-import cors from 'cors'
 import 'express-async-errors'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import { csrfSync } from 'csrf-sync'
 import express, { NextFunction, Request, Response } from 'express'
 import session from 'express-session'
 import helmet from 'helmet'
@@ -11,10 +13,8 @@ import RouteError from '@aces/errors/route-error'
 import appRouter from '@aces/routes/index'
 import PrismaSessionStore from '@aces/services/sessions/store'
 
-
 // **** Variables **** //
 const app = express()
-
 
 // **** Setup **** //
 // Basic middleware
@@ -24,7 +24,7 @@ app.use(express.json())
 app.use(cors({
   origin: process.env.FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
   credentials: true
 }))
 
@@ -34,8 +34,12 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: new PrismaSessionStore(),
-  cookie: { secure: process.env.NODE_ENV === 'production' }
+  cookie: { secure: process.env.NODE_ENV === 'production' },
 }))
+
+app.use(cookieParser())
+const { csrfSynchronisedProtection } = csrfSync()
+app.use(csrfSynchronisedProtection)
 
 // Show routes called in console during development
 if (process.env.NODE_EVN === NodeEnvs.Dev.valueOf()) {
@@ -48,7 +52,6 @@ if (process.env.NODE_ENV === NodeEnvs.Production.valueOf()) {
 }
 
 app.use('/', appRouter)
-
 
 // Add error handler
 app.use((

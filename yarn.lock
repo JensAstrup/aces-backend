@@ -2475,6 +2475,13 @@ crypto-js@^4.2.0:
   resolved "https://registry.npmjs.org/crypto-js/-/crypto-js-4.2.0.tgz"
   integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
 
+csrf-sync@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/csrf-sync/-/csrf-sync-4.0.3.tgz#3bc629a2c080d2291479f55d5bfa58edf9af6078"
+  integrity sha512-wXzltBBzt/7imzDt6ZT7G/axQG7jo4Sm0uXDUzFY8hR59qhDHdjqpW2hojS4oAVIZDzwlMQloIVCTJoDDh0wwA==
+  dependencies:
+    http-errors "^2.0.0"
+
 cuint@^0.2.2:
   version "0.2.2"
   resolved "https://registry.npmjs.org/cuint/-/cuint-0.2.2.tgz"
@@ -3622,7 +3629,7 @@ html-escaper@^2.0.0:
   resolved "https://registry.npmjs.org/html-escaper/-/html-escaper-2.0.2.tgz"
   integrity sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==
 
-http-errors@2.0.0:
+http-errors@2.0.0, http-errors@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/http-errors/-/http-errors-2.0.0.tgz"
   integrity sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ==

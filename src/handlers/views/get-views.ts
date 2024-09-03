@@ -10,7 +10,7 @@ interface View {
 }
 
 async function getViews(request: Request, response: Response): Promise<void> {
-  const user = request.user
+  const user = request.session.user
   if (!user) {
     response.status(HttpStatusCodes.UNAUTHORIZED).send('Unauthorized')
     return

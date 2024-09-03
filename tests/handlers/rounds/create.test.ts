@@ -16,7 +16,7 @@ describe('createRoundHandler', () => {
   beforeEach(() => {
     mockUser = { linearId: 'mock-id' } as User
     mockRequest = {
-      user: mockUser,
+      session: { user: mockUser }
     } as Request
     mockResponse = {
       status: jest.fn().mockReturnThis(),
@@ -30,7 +30,7 @@ describe('createRoundHandler', () => {
   })
 
   it('should return 401 if user is not authenticated', async () => {
-    mockRequest.user = undefined
+    mockRequest.session.user = undefined
 
     await createRoundHandler(mockRequest, mockResponse as Response)
 
@@ -40,7 +40,7 @@ describe('createRoundHandler', () => {
 
   it('should return 401 if user token is missing', async () => {
     // @ts-expect-error We are testing the case where user is anonymous
-    mockRequest.user = { linearId: undefined }
+    mockRequest.session.user = { linearId: undefined }
 
     await createRoundHandler(mockRequest, mockResponse as Response)
 

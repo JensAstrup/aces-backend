@@ -17,13 +17,17 @@ interface SetIssueRequest extends Request {
 
 
 async function setIssueHandler(request: SetIssueRequest, response: Response): Promise<void> {
-  const user = request.user
+  const user = request.session.user
   if (!user || !user.linearId) {
     response.status(HttpStatusCodes.UNAUTHORIZED).send('Unauthorized')
     return
   }
   const roundId = request.params.roundId
   const issueId = request.body.issue
+  if (!user.token) {
+    response.status(HttpStatusCodes.UNAUTHORIZED).send()
+    return
+  }
   const issue = await setIssue(roundId, issueId, decrypt(user.token))
   const dbIssue = await getIssue({ roundId, linearId: issueId })
   if (!dbIssue) {

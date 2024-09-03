@@ -16,7 +16,10 @@ describe('getViews', () => {
 
   beforeEach(() => {
     req = {
-      user: { token: '123' } as User
+      // @ts-expect-error We're not covering all properties of Request session
+      session: {
+        user: { token: '123' } as User
+      }
     }
     res = {
       json: jest.fn(),
@@ -34,7 +37,7 @@ describe('getViews', () => {
 
     await getViews(req as Request, res as Response)
 
-    expect(mockGetFavoriteViews).toHaveBeenCalledWith(req.user)
+    expect(mockGetFavoriteViews).toHaveBeenCalledWith(req.session!.user)
     expect(res.json).toHaveBeenCalledWith([
       { id: '1', name: 'Issue' },
       { id: '2', name: 'Board' }
@@ -50,7 +53,7 @@ describe('getViews', () => {
 
     await getViews(req as Request, res as Response)
 
-    expect(mockGetFavoriteViews).toHaveBeenCalledWith(req.user)
+    expect(mockGetFavoriteViews).toHaveBeenCalledWith(req.session!.user)
     expect(res.json).toHaveBeenCalledWith([
       null,
       { id: '2', name: 'Board' }
@@ -58,7 +61,7 @@ describe('getViews', () => {
   })
 
   it('should return unauthorized if user is not present', async () => {
-    req.user = undefined
+    req.session!.user = undefined
 
     await getViews(req as Request, res as Response)
 

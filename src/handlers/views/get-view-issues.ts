@@ -10,12 +10,17 @@ async function getIssues(request: Request, response: Response): Promise<void> {
     return
   }
 
-  const user = request.user
+  const user = request.session.user
   if (!user) {
-    response.status(HttpStatusCodes.UNAUTHORIZED).send('Unauthorized')
+    response.status(HttpStatusCodes.UNAUTHORIZED).send()
     return
   }
   const nextPage = request.query.nextPage
+
+  if (!user.token) {
+    response.status(HttpStatusCodes.UNAUTHORIZED).send()
+    return
+  }
 
   const viewIssues = await getViewIssues(request.params.viewId, user.token, nextPage)
   response.json(viewIssues)

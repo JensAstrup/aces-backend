@@ -1,9 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { Request, Response } from 'express'
-import { v7 as uuidv7 } from 'uuid'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
-import encrypt from '@aces/util/encryption/encrypt'
 
 
 const prisma = new PrismaClient()
@@ -16,15 +14,7 @@ interface AnonymousRegistrationRequest extends Request {
 }
 
 async function anonymousRegistration(request: AnonymousRegistrationRequest, response: Response): Promise<void> {
-  const randomId = uuidv7()
-  const token = `anonymous-${randomId}`
-  const encryptedToken = encrypt(token)
-  const user = await prisma.user.create({
-    data: {
-      token: encryptedToken,
-    }
-  })
-  // Add user as guest to round
+  const user = await prisma.user.create({ data: {} })
   await prisma.round.update({
     where: {
       id: request.body.roundId
@@ -37,6 +27,7 @@ async function anonymousRegistration(request: AnonymousRegistrationRequest, resp
       }
     }
   })
+  request.session.user = user
   response.status(HttpStatusCodes.CREATED).json({ user })
 }
 

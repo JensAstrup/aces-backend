@@ -15,7 +15,8 @@ interface IncomingAccessTokenRequest extends Request {
 async function authorize(request: IncomingAccessTokenRequest, response: Response): Promise<void> {
   const accessToken = await exchangeCode(request.body.code)
   const user = await createUser(accessToken)
-  response.status(HttpStatusCodes.OK).json({ accessToken: user.token })
+  request.session.user = user
+  response.status(HttpStatusCodes.NO_CONTENT).send()
 }
 
 export default authorize

@@ -5,6 +5,9 @@ import decrypt from '@aces/util/encryption/decrypt'
 
 
 async function getFavoriteViews(user: User): Promise<Favorite[]> {
+  if (!user.token) {
+    return []
+  }
   const accessToken = decrypt(user.token)
   const linear = new LinearClient({ accessToken })
   const favorites = await linear.favorites()

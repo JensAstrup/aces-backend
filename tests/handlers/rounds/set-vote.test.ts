@@ -32,7 +32,8 @@ describe('setVoteHandler', () => {
       updatedAt: new Date()
     }
     mockRequest = {
-      user: mockUser,
+      // @ts-expect-error We're just mocking the properties we need
+      session: { user: mockUser },
       params: { roundId: 'round-1' },
       body: { issueId: 'linear-1', vote: 5 }
     }
@@ -76,7 +77,7 @@ describe('setVoteHandler', () => {
   })
 
   it('should return UNAUTHORIZED when user is not authenticated', async () => {
-    mockRequest.user = undefined
+    mockRequest.session!.user = undefined
 
     await setVoteHandler(mockRequest as Request, mockResponse as Response)
 

@@ -27,6 +27,12 @@ jest.mock('@aces/util/encryption/decrypt', () => {
 })
 
 describe('getFavoriteViews', () => {
+  it('should return empty array if user has no token', async () => {
+    const user = {} as User
+    const result = getFavoriteViews(user)
+    await expect(result).resolves.toEqual([])
+  })
+
   it('should return favorite views', async () => {
     const user = {
       token: '123'

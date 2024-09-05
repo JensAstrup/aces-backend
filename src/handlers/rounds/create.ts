@@ -7,7 +7,7 @@ import handleError from '@aces/util/handle-error'
 
 
 async function createRoundHandler(request: Request, response: Response): Promise<void> {
-  const user = request.user
+  const user = request.session.user
   if (!user || !user.linearId) {
     response.status(HttpStatusCodes.UNAUTHORIZED).send('Unauthorized')
     return

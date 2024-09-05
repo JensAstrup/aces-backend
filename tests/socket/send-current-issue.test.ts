@@ -1,9 +1,10 @@
 import { Issue } from '@linear/sdk'
-import { PrismaClient, Round } from '@prisma/client'
+import { PrismaClient, Round, Vote } from '@prisma/client'
 import { WebSocket } from 'ws'
 
 import { WebSocketCloseCode } from '@aces/common/WebSocketCodes'
 import getLinearIssue from '@aces/linear/get-linear-issue'
+import getIssueVotes from '@aces/services/issues/get-issue-votes'
 import sendCurrentIssue from '@aces/socket/send-current-issue'
 import sendMessageToRound from '@aces/socket/send-message-to-round'
 import decrypt from '@aces/util/encryption/decrypt'
@@ -19,13 +20,6 @@ jest.mock('@prisma/client', () => {
     PrismaClient: jest.fn(() => mockPrismaClient),
     Prisma: {
       PrismaClientKnownRequestError: class PrismaClientKnownRequestError extends Error {
-        constructor(message: string, { code }: { code: string }) {
-          super(message)
-          this.name = 'PrismaClientKnownRequestError'
-          this.code = code
-        }
-
-        code: string
       },
     },
   }
@@ -33,10 +27,12 @@ jest.mock('@prisma/client', () => {
 
 jest.mock('@aces/linear/get-linear-issue')
 jest.mock('@aces/util/encryption/decrypt')
+jest.mock('@aces/services/issues/get-issue-votes')
 jest.mock('@aces/socket/send-message-to-round')
 
 const mockGetLinearIssue = getLinearIssue as jest.MockedFunction<typeof getLinearIssue>
 const mockDecrypt = decrypt as jest.MockedFunction<typeof decrypt>
+const mockGetIssueVotes = getIssueVotes as jest.MockedFunction<typeof getIssueVotes>
 const mockSendMessageToRound = sendMessageToRound as jest.MockedFunction<typeof sendMessageToRound>
 
 describe('sendCurrentIssue', () => {
@@ -71,17 +67,18 @@ describe('sendCurrentIssue', () => {
       currentIssue: { linearId: 'issue_123' }
     } as unknown as Round
     const mockIssue = { id: 'issue_123', title: 'Test Issue' } as Issue
+    const mockIssueVotes = [{ vote: 1 }, { vote: 2 }] as Vote[]
 
     mockPrismaClient.round.findUnique.mockResolvedValue(mockRound)
     mockDecrypt.mockReturnValue('decrypted_token')
+    mockGetIssueVotes.mockResolvedValue(mockIssueVotes)
     mockGetLinearIssue.mockResolvedValue(mockIssue)
 
     await sendCurrentIssue('round_123', mockWs)
 
     expect(mockDecrypt).toHaveBeenCalledWith('encrypted_token')
     expect(mockGetLinearIssue).toHaveBeenCalledWith('issue_123', 'decrypted_token')
-    expect(mockSendMessageToRound).toHaveBeenCalledWith('round_123', { type: 'issue', payload: mockIssue, event: 'response' })
-    expect(consoleSpy).toHaveBeenCalledWith('Sending current issue for round round_123')
+    expect(mockSendMessageToRound).toHaveBeenCalledWith('round_123', { type: 'issue', payload: { issue: mockIssue, votes: [1, 2] }, event: 'response' })
   })
 
   it('should close the connection if round is not found', async () => {

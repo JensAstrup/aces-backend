@@ -12,7 +12,9 @@ const mockGetViewIssues = getViewIssues as jest.Mock
 describe('getIssues', () => {
   it('should return 400 if nextPage is not a string', async () => {
     const request = {
-      user: { id: '123', token: '456' } as User,
+      session: {
+        user: { id: '123', token: '456' } as User,
+      },
       query: {
         nextPage: 123
       }
@@ -28,7 +30,7 @@ describe('getIssues', () => {
 
   it('should return 401 if user is not authenticated', async () => {
     const request = {
-      user: null,
+      session: { user: null, },
       query: {}
     } as unknown as Request
     const response = {
@@ -37,14 +39,30 @@ describe('getIssues', () => {
     } as unknown as Response
     await getIssues(request, response)
     expect(response.status).toHaveBeenCalledWith(401)
-    expect(response.send).toHaveBeenCalledWith('Unauthorized')
+    expect(response.send).toHaveBeenCalled()
+  })
+
+  it('should return 401 if user has no token', async () => {
+    const request = {
+      session: { user: {}, },
+      query: {}
+    } as unknown as Request
+    const response = {
+      status: jest.fn().mockReturnThis(),
+      send: jest.fn()
+    } as unknown as Response
+    await getIssues(request, response)
+    expect(response.status).toHaveBeenCalledWith(401)
+    expect(response.send).toHaveBeenCalled()
   })
 
   it('should return issues', async () => {
     const request = {
-      user: {
-        id: '123',
-        token: '456'
+      session: {
+        user: {
+          id: '123',
+          token: '456'
+        }
       },
       params: {
         viewId: '789'

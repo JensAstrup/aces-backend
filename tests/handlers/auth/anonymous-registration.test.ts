@@ -70,5 +70,6 @@ describe('anonymousRegistration', () => {
     })
     expect(mockResponse.status).toHaveBeenCalledWith(HttpStatusCodes.CREATED)
     expect(mockResponse.json).toHaveBeenCalledWith({ user: mockUser })
+    expect(mockRequest.session?.anonymous).toBe(true)
   })
 })

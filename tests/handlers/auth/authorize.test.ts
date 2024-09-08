@@ -28,6 +28,7 @@ describe('authorize', () => {
     await authorize(request, response)
     expect(response.status).toHaveBeenCalledWith(204)
     expect(request.session.user).toEqual({ token: 'abcdef' })
+    expect(request.session.anonymous).toBe(false)
   })
 
   it('should return an error message', async () => {

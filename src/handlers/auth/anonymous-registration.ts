@@ -28,6 +28,7 @@ async function anonymousRegistration(request: AnonymousRegistrationRequest, resp
     }
   })
   request.session.user = user
+  request.session.anonymous = true
   response.status(HttpStatusCodes.CREATED).json({ user })
 }
 

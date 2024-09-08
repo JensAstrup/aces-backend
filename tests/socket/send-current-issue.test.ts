@@ -67,7 +67,7 @@ describe('sendCurrentIssue', () => {
       currentIssue: { linearId: 'issue_123' }
     } as unknown as Round
     const mockIssue = { id: 'issue_123', title: 'Test Issue' } as Issue
-    const mockIssueVotes = [{ vote: 1 }, { vote: 2 }] as Vote[]
+    const mockIssueVotes = [{ value: 1 }, { value: 2 }] as Vote[]
 
     mockPrismaClient.round.findUnique.mockResolvedValue(mockRound)
     mockDecrypt.mockReturnValue('decrypted_token')

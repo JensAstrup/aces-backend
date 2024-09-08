@@ -61,7 +61,7 @@ describe('setIssueHandler', () => {
     mockDecrypt.mockReturnValue('decrypted-token')
     mockSetIssue.mockResolvedValue({ id: 'test-issue-id', linearId: 'test-linear-id', title: 'Test Issue' } as unknown as Issue)
     mockGetIssue.mockResolvedValue({ id: 'test-issue-id', linearId: 'test-linear-id', roundId: 'test-round-id' })
-    mockGetIssueVotes.mockResolvedValue([{ vote: 1 }, { vote: 2 }] as Vote[])
+    mockGetIssueVotes.mockResolvedValue([{ value: 1 }, { vote: 2 }] as Vote[])
     mockGetGuests.mockResolvedValue([{ userId: 'guest-1', roundId: 'test-round-id' }, { userId: 'guest-2', roundId: 'test-round-id' }])
   })
 
@@ -130,7 +130,7 @@ describe('setIssueHandler', () => {
       type: 'issue',
       payload: {
         issue: { id: 'test-issue-id', linearId: 'test-linear-id', title: 'Test Issue' },
-        votes: [1, 2],
+        votes: [1, undefined],
         expectedVotes: 3
       },
       event: 'roundIssueUpdated'

@@ -20,7 +20,7 @@ describe('setVote', () => {
   const mockVoteValue = 5
   const mockUser: User = { id: 'user-1' } as User
   const mockIssue: Issue = { id: 'issue-1', roundId: mockRoundId, linearId: mockLinearId } as Issue
-  const mockVote: Vote = { id: 'vote-1', issueId: mockIssue.id, userId: mockUser.id, vote: mockVoteValue } as Vote
+  const mockVote: Vote = { id: 'vote-1', issueId: mockIssue.id, userId: mockUser.id, value: mockVoteValue } as Vote
 
   beforeEach(() => {
     jest.clearAllMocks()

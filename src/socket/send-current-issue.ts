@@ -37,7 +37,7 @@ async function sendCurrentIssue(roundId: string, socket: WebSocket): Promise<voi
       }
       const issue = await getLinearIssue(issueId, decrypt(round.creator.token!))
       const issueVotes = await getIssueVotes(currentIssue)
-      const votes = issueVotes.map(vote => vote.vote)
+      const votes = issueVotes.map(vote => vote.value)
       if (issue) {
         sendMessageToRound(roundId, { type: 'issue', payload: { issue, votes }, event: 'response' })
       }

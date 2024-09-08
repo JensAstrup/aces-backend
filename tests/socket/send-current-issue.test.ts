@@ -67,7 +67,7 @@ describe('sendCurrentIssue', () => {
       currentIssue: { linearId: 'issue_123' }
     } as unknown as Round
     const mockIssue = { id: 'issue_123', title: 'Test Issue' } as Issue
-    const mockIssueVotes = [{ vote: 1 }, { vote: 2 }] as Vote[]
+    const mockIssueVotes = [{ value: 1 }, { value: 2 }, { value: null }] as Vote[]
 
     mockPrismaClient.round.findUnique.mockResolvedValue(mockRound)
     mockDecrypt.mockReturnValue('decrypted_token')
@@ -78,7 +78,7 @@ describe('sendCurrentIssue', () => {
 
     expect(mockDecrypt).toHaveBeenCalledWith('encrypted_token')
     expect(mockGetLinearIssue).toHaveBeenCalledWith('issue_123', 'decrypted_token')
-    expect(mockSendMessageToRound).toHaveBeenCalledWith('round_123', { type: 'issue', payload: { issue: mockIssue, votes: [1, 2] }, event: 'response' })
+    expect(mockSendMessageToRound).toHaveBeenCalledWith('round_123', { type: 'issue', payload: { issue: mockIssue, votes: [1, 2, null] }, event: 'response' })
   })
 
   it('should close the connection if round is not found', async () => {

@@ -33,7 +33,7 @@ class RoundNotifier {
         }
       },
     })
-    const votes = voteRecords.map(vote => vote.vote)
+    const votes = voteRecords.map(vote => vote.value)
     const expectedVoted = this.round.guests.length + 1 // +1 for the host
     const message: VoteUpdatedMessage = { event: 'voteUpdated', type: 'vote', payload: { issueId: issue.id, votes, expectedVotes: expectedVoted } }
     sendMessageToRound(this.round.id, message)

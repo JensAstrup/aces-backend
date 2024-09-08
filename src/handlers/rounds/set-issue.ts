@@ -35,7 +35,7 @@ async function setIssueHandler(request: SetIssueRequest, response: Response): Pr
     return
   }
   const issueVotes = await getIssueVotes(dbIssue)
-  const votes = issueVotes.map(vote => vote.vote)
+  const votes = issueVotes.map(vote => vote.value)
   const roundGuests = await getGuests({ round: roundId })
   const expectedVotes = roundGuests.length + 1 // Add 1 for the creator
   response.status(HttpStatusCodes.NO_CONTENT)

@@ -18,7 +18,7 @@ async function setVoteHandler(request: SetVoteRequest, response: Response): Prom
   const { issueId, vote } = request.body
 
   const user = request.session.user
-  if (!user) {
+  if (user === undefined) {
     response.status(HttpStatusCodes.UNAUTHORIZED).json({ error: 'Unauthorized' })
     return
   }

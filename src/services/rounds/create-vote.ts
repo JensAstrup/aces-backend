@@ -14,10 +14,10 @@ async function createVote(issue: Issue, user: User, estimate: number): Promise<V
     create: {
       issueId: issue.id,
       userId: user.id,
-      vote: estimate
+      value: estimate
     },
     update: {
-      vote: estimate
+      value: estimate
     }
   })
   return vote

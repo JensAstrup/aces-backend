@@ -39,7 +39,7 @@ describe('createVote', () => {
       id: 'vote-1',
       issueId: mockIssue.id,
       userId: mockUser.id,
-      vote: mockEstimate
+      value: mockEstimate
     } as Vote
 
     mockPrismaClient.vote.upsert.mockResolvedValue(mockVote)
@@ -57,10 +57,10 @@ describe('createVote', () => {
       create: {
         issueId: mockIssue.id,
         userId: mockUser.id,
-        vote: mockEstimate
+        value: mockEstimate
       },
       update: {
-        vote: mockEstimate
+        value: mockEstimate
       }
     })
   })
@@ -70,10 +70,10 @@ describe('createVote', () => {
       id: 'vote-1',
       issueId: mockIssue.id,
       userId: mockUser.id,
-      vote: 3
+      value: 3
     } as Vote
 
-    const updatedVote: Vote = { ...existingVote, vote: mockEstimate }
+    const updatedVote: Vote = { ...existingVote, value: mockEstimate }
 
     mockPrismaClient.vote.upsert.mockResolvedValue(updatedVote)
 
@@ -90,10 +90,10 @@ describe('createVote', () => {
       create: {
         issueId: mockIssue.id,
         userId: mockUser.id,
-        vote: mockEstimate
+        value: mockEstimate
       },
       update: {
-        vote: mockEstimate
+        value: mockEstimate
       }
     })
   })

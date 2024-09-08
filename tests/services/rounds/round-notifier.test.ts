@@ -61,8 +61,8 @@ describe('RoundNotifier', () => {
 
   it('should fetch votes, map them correctly, and send a message when voteSet is called', async () => {
     const mockVoteRecords: Vote[] = [
-      { id: 'vote-1', vote: 3, issueId: 'issue-1', userId: 'user-1' },
-      { id: 'vote-2', vote: 5, issueId: 'issue-1', userId: 'user-2' }
+      { id: 'vote-1', value: 3, issueId: 'issue-1', userId: 'user-1' },
+      { id: 'vote-2', value: 5, issueId: 'issue-1', userId: 'user-2' }
     ] as Vote[]
 
     mockPrismaClient.vote.findMany.mockResolvedValue(mockVoteRecords)
@@ -135,9 +135,9 @@ describe('RoundNotifier', () => {
 
   it('should correctly map vote records to vote values', async () => {
     const mockVoteRecords: Vote[] = [
-      { id: 'vote-1', vote: 1, issueId: 'issue-1', userId: 'user-1' },
-      { id: 'vote-2', vote: 3, issueId: 'issue-1', userId: 'user-2' },
-      { id: 'vote-3', vote: 5, issueId: 'issue-1', userId: 'user-3' }
+      { id: 'vote-1', value: 1, issueId: 'issue-1', userId: 'user-1' },
+      { id: 'vote-2', value: 3, issueId: 'issue-1', userId: 'user-2' },
+      { id: 'vote-3', value: 5, issueId: 'issue-1', userId: 'user-3' }
     ] as Vote[]
 
     mockPrismaClient.vote.findMany.mockResolvedValue(mockVoteRecords)

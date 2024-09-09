@@ -1,5 +1,6 @@
 import http from 'http'
 
+import * as Sentry from '@sentry/node'
 import { WebSocketServer } from 'ws'
 
 import createWebSocketServer from '@aces/socket/create'
@@ -16,18 +17,17 @@ const mockWebSocketServer = WebSocketServer as unknown as jest.Mock
 describe('createWebSocketServer', () => {
   let mockServer: http.Server
   let consoleSpy: jest.SpyInstance
-  let consoleErrorSpy: jest.SpyInstance
+  let mockSentry: jest.SpyInstance
 
   beforeEach(() => {
     mockServer = {} as http.Server
     consoleSpy = jest.spyOn(console, 'log').mockImplementation()
-    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
+    mockSentry = jest.spyOn(Sentry, 'captureException').mockImplementation()
   })
 
   afterEach(() => {
     jest.clearAllMocks()
     consoleSpy.mockRestore()
-    consoleErrorSpy.mockRestore()
   })
 
   it('should create a new WebSocketServer', () => {
@@ -62,6 +62,6 @@ describe('createWebSocketServer', () => {
     const testError = new Error('Test error')
     errorHandler(testError)
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith('WebSocket server error:', testError)
+    expect(mockSentry).toHaveBeenCalledWith(testError)
   })
 })

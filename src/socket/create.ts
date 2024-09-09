@@ -1,5 +1,6 @@
 import http from 'http'
 
+import * as Sentry from '@sentry/node'
 import { WebSocketServer } from 'ws'
 
 
@@ -8,7 +9,7 @@ function createWebSocketServer(server: http.Server): WebSocketServer {
     console.log('WebSocket server is ready')
   })
   wss.on('error', (error: Error) => {
-    console.error('WebSocket server error:', error)
+    Sentry.captureException(error)
   })
   console.log('WebSocket server started')
   return wss

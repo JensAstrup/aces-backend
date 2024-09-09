@@ -35,7 +35,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@dotenvx/dotenvx": "^1.13.2",
+    "@dotenvx/dotenvx": "^1.14.0",
     "@linear/sdk": "^27.0.0",
     "@prisma/client": "5.17.0",
     "@sentry/cli": "^2.33.1",

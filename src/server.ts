@@ -34,7 +34,6 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: new PrismaSessionStore(),
-  cookie: { secure: process.env.NODE_ENV === 'production' },
 }))
 
 app.use(cookieParser())

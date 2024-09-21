@@ -13,6 +13,7 @@ jest.mock('express', () => {
 
   const mockExpress: jest.Mocked<Express> = {
     use: jest.fn(),
+    set: jest.fn(),
     _router: { stack: [] },
   } as unknown as jest.Mocked<Express>
 
@@ -82,6 +83,10 @@ describe('Server', () => {
     expect(mockExpress.json).toHaveBeenCalled()
     expect(mockExpress.urlencoded).toHaveBeenCalledWith({ extended: true })
     expect(app.use).toHaveBeenCalledWith(expect.any(Function))
+  })
+
+  it('should trust first proxy', () => {
+    expect(app.set).toHaveBeenCalledWith('trust proxy', 1)
   })
 
   it('should set up CORS', () => {

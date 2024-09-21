@@ -27,13 +27,14 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token'],
   credentials: true
 }))
-
+app.set('trust proxy', 1) // Trust the first proxy
 // Auth middleware
 app.use(session({
   secret: process.env.COOKIE_SECRET!,
   resave: false,
   saveUninitialized: true,
   store: new PrismaSessionStore(),
+  cookie: { secure: process.env.NODE_ENV === 'production' },
 }))
 
 app.use(cookieParser())

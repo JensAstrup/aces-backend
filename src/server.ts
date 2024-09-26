@@ -28,13 +28,18 @@ app.use(cors({
   credentials: true
 }))
 app.set('trust proxy', 1) // Trust the first proxy
+
 // Auth middleware
+const isStagingOrProduction = process.env.NODE_ENV === 'staging' || process.env.NODE_ENV === 'production'
 app.use(session({
   secret: process.env.COOKIE_SECRET!,
   resave: false,
   saveUninitialized: true,
   store: new PrismaSessionStore(),
-  cookie: { secure: process.env.NODE_ENV === 'production' },
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    domain: isStagingOrProduction ? '.aceofspades.app' : undefined
+  },
 }))
 
 app.use(cookieParser())

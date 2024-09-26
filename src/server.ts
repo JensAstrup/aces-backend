@@ -34,7 +34,10 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   store: new PrismaSessionStore(),
-  cookie: { secure: process.env.NODE_ENV === 'production' },
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    domain: '.aceofspades.app'
+  },
 }))
 
 app.use(cookieParser())

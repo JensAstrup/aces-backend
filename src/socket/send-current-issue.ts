@@ -2,6 +2,7 @@ import { Issue, PrismaClient } from '@prisma/client'
 import { WebSocket } from 'ws'
 
 import { WebSocketCloseCode } from '@aces/common/WebSocketCodes'
+import SocketMessage from '@aces/interfaces/socket-message'
 import getLinearIssue from '@aces/linear/get-linear-issue'
 import getIssueVotes from '@aces/services/issues/get-issue-votes'
 import sendMessageToRound from '@aces/socket/send-message-to-round'
@@ -42,6 +43,7 @@ async function sendCurrentIssue(roundId: string, socket: WebSocket): Promise<voi
         sendMessageToRound(roundId, { type: 'issue', payload: { issue, votes }, event: 'response' })
       }
     }
+    socket.send(JSON.stringify({ type: 'connection', event: 'noContent', payload: {} } as SocketMessage))
   }
   catch (error) {
     console.error(`Error sending current issue for round ${roundId}:`, error)

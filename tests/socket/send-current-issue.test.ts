@@ -36,7 +36,7 @@ const mockGetIssueVotes = getIssueVotes as jest.MockedFunction<typeof getIssueVo
 const mockSendMessageToRound = sendMessageToRound as jest.MockedFunction<typeof sendMessageToRound>
 
 describe('sendCurrentIssue', () => {
-  let mockWs: jest.Mocked<WebSocket>
+  let mockWebSocket: jest.Mocked<WebSocket>
   let consoleSpy: jest.SpyInstance
   let consoleErrorSpy: jest.SpyInstance
   const mockPrismaClient = new PrismaClient() as unknown as {
@@ -46,7 +46,7 @@ describe('sendCurrentIssue', () => {
   }
 
   beforeEach(() => {
-    mockWs = {
+    mockWebSocket = {
       close: jest.fn(),
       send: jest.fn()
     } as unknown as jest.Mocked<WebSocket>
@@ -74,20 +74,21 @@ describe('sendCurrentIssue', () => {
     mockGetIssueVotes.mockResolvedValue(mockIssueVotes)
     mockGetLinearIssue.mockResolvedValue(mockIssue)
 
-    await sendCurrentIssue('round_123', mockWs)
+    await sendCurrentIssue('round_123', mockWebSocket)
 
     expect(mockDecrypt).toHaveBeenCalledWith('encrypted_token')
     expect(mockGetLinearIssue).toHaveBeenCalledWith('issue_123', 'decrypted_token')
     expect(mockSendMessageToRound).toHaveBeenCalledWith('round_123', { type: 'issue', payload: { issue: mockIssue, votes: [1, 2, null] }, event: 'response' })
+    expect(mockWebSocket.send).toHaveBeenCalledWith(JSON.stringify({ type: 'connection', event: 'noContent', payload: {} }))
   })
 
   it('should close the connection if round is not found', async () => {
     mockPrismaClient.round.findUnique.mockResolvedValue(null)
 
-    await sendCurrentIssue('non_existent_round', mockWs)
+    await sendCurrentIssue('non_existent_round', mockWebSocket)
 
     expect(consoleErrorSpy).toHaveBeenCalledWith('Round not found: non_existent_round')
-    expect(mockWs.close).toHaveBeenCalledWith(WebSocketCloseCode.POLICY_VIOLATION, 'Round not found')
+    expect(mockWebSocket.close).toHaveBeenCalledWith(WebSocketCloseCode.POLICY_VIOLATION, 'Round not found')
   })
 
   it('should handle round without current issue', async () => {
@@ -98,9 +99,10 @@ describe('sendCurrentIssue', () => {
     mockGetLinearIssue.mockResolvedValue(null)
     mockPrismaClient.round.findUnique.mockResolvedValue(mockRound)
 
-    await sendCurrentIssue('round_without_issue', mockWs)
+    await sendCurrentIssue('round_without_issue', mockWebSocket)
 
     expect(mockGetLinearIssue).not.toHaveBeenCalled()
     expect(mockSendMessageToRound).not.toHaveBeenCalled()
+    expect(mockWebSocket.send).toHaveBeenCalledWith(JSON.stringify({ type: 'connection', event: 'noContent', payload: {} }))
   })
 })

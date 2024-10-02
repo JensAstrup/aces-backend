@@ -1,8 +1,8 @@
 import { Issue } from '@prisma/client'
 
 
-type SocketMessageType = 'vote' | 'issue' | 'round' | 'user'
-type SocketMessageEvent = 'voteUpdated' | 'roundIssueUpdated' | 'response' | 'error'
+type SocketMessageType = 'vote' | 'issue' | 'round' | 'user' | 'connection'
+type SocketMessageEvent = 'voteUpdated' | 'roundIssueUpdated' | 'response' | 'error' | 'noContent'
 
 interface SocketMessage {
     event: SocketMessageEvent

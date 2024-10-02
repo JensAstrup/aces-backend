@@ -15,6 +15,8 @@ jest.mock('@aces/socket/add-connection-to-round')
 jest.mock('@aces/socket/send-current-issue')
 jest.mock('@aces/socket/setup-listeners')
 
+const mockAddConnectionToRound = addConnectionToRound as jest.MockedFunction<typeof addConnectionToRound>
+
 describe('handleNewConnection', () => {
   let mockWs: WebSocket
   let mockReq: http.IncomingMessage
@@ -42,11 +44,21 @@ describe('handleNewConnection', () => {
   })
 
   it('should handle a new connection with a valid roundId', () => {
+    mockAddConnectionToRound.mockReturnValue(true)
     handleNewConnection(mockWs, mockReq)
 
-    expect(addConnectionToRound).toHaveBeenCalledWith('123', mockWs)
+    expect(mockAddConnectionToRound).toHaveBeenCalledWith('123', mockWs)
     expect(setupWebSocketListeners).toHaveBeenCalledWith(mockWs, '123')
     expect(sendCurrentIssue).toHaveBeenCalledWith('123', mockWs)
+  })
+
+  it('should handle an existing connection with a valid roundId', () => {
+    mockAddConnectionToRound.mockReturnValue(false)
+    handleNewConnection(mockWs, mockReq)
+
+    expect(mockAddConnectionToRound).toHaveBeenCalledWith('123', mockWs)
+    expect(setupWebSocketListeners).toHaveBeenCalledWith(mockWs, '123')
+    expect(sendCurrentIssue).not.toHaveBeenCalled()
   })
 
   it('should close the connection if no roundId is provided', () => {
@@ -67,6 +79,7 @@ describe('handleNewConnection', () => {
     (url.parse as jest.Mock).mockReturnValue({
       query: { roundId: '456' }
     })
+    mockAddConnectionToRound.mockReturnValue(true)
 
     handleNewConnection(mockWs, mockReq)
 

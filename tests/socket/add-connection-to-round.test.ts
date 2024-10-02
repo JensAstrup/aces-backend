@@ -37,13 +37,14 @@ describe('addConnectionToRound', () => {
     const existingWs = {} as WebSocket
     roundConnections.set(roundId, new Set([existingWs]))
 
-    addConnectionToRound(roundId, mockWs)
+    const added = addConnectionToRound(roundId, mockWs)
 
     const connections = roundConnections.get(roundId)
     expect(connections?.size).toBe(2)
     expect(connections?.has(existingWs)).toBe(true)
     expect(connections?.has(mockWs)).toBe(true)
     expect(consoleSpy).not.toHaveBeenCalled()
+    expect(added).toBe(true)
   })
 
   it('should handle multiple additions to the same round', () => {
@@ -67,11 +68,13 @@ describe('addConnectionToRound', () => {
   it('should not create duplicate entries for the same WebSocket', () => {
     const roundId = 'round4'
 
-    addConnectionToRound(roundId, mockWs)
-    addConnectionToRound(roundId, mockWs)
+    const added_1 = addConnectionToRound(roundId, mockWs)
+    const added_2 = addConnectionToRound(roundId, mockWs)
 
     const connections = roundConnections.get(roundId)
     expect(connections?.size).toBe(1)
     expect(connections?.has(mockWs)).toBe(true)
+    expect(added_1).toBe(true)
+    expect(added_2).toBe(false)
   })
 })

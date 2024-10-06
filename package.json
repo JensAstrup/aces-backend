@@ -74,7 +74,7 @@
     "@types/jasmine": "^5.1.4",
     "@types/jest": "^29.5.12",
     "@types/jsonfile": "^6.1.4",
-    "@types/jsonwebtoken": "^9.0.6",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/morgan": "^1.9.9",
     "@types/node": "^22.5.5",
     "@types/supertest": "^6.0.2",

@@ -19,7 +19,9 @@ export function handleNewConnection(ws: WebSocket, req: http.IncomingMessage): v
     return
   }
 
-  addConnectionToRound(roundId, ws)
+  const connectionAdded = addConnectionToRound(roundId, ws)
   setupWebSocketListeners(ws, roundId)
-  sendCurrentIssue(roundId, ws)
+  if (connectionAdded) {
+    sendCurrentIssue(roundId, ws)
+  }
 }

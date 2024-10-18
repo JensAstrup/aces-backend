@@ -47,12 +47,13 @@ model Vote {
 }
 
 model Issue {
-  id           String  @id @default(cuid())
+  id           String   @id @default(cuid())
   linearId     String
-  round        Round   @relation(fields: [roundId], references: [id])
+  round        Round    @relation(fields: [roundId], references: [id])
   roundId      String
   votes        Vote[]
-  activeRounds Round[] @relation("currentIssue")
+  activeRounds Round[]  @relation("currentIssue")
+  createdAt    DateTime @default(now())
 
   @@unique([roundId, linearId])
 }

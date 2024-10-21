@@ -1,6 +1,6 @@
 {
   "name": "aces-backend",
-  "version": "1.0.0-alpha.16",
+  "version": "1.0.0-alpha.17",
   "scripts": {
     "build-base": "npx ts-node build.ts",
     "build": "NODE_ENV=production npm run build-base && npm run sentry:sourcemaps && npm run cleanup:sourcemaps",

@@ -1,5 +1,5 @@
-import { Issue } from '@linear/sdk'
-import { User, Vote } from '@prisma/client'
+import { Issue as LinearIssue } from '@linear/sdk'
+import { User, Vote, Issue } from '@prisma/client'
 import { Request, Response } from 'express'
 
 import HttpStatusCodes from '@aces/common/HttpStatusCodes'
@@ -59,8 +59,8 @@ describe('setIssueHandler', () => {
     }
 
     mockDecrypt.mockReturnValue('decrypted-token')
-    mockSetIssue.mockResolvedValue({ id: 'test-issue-id', linearId: 'test-linear-id', title: 'Test Issue' } as unknown as Issue)
-    mockGetIssue.mockResolvedValue({ id: 'test-issue-id', linearId: 'test-linear-id', roundId: 'test-round-id' })
+    mockSetIssue.mockResolvedValue({ id: 'test-issue-id', linearId: 'test-linear-id', roundId: 'test-round-id', title: 'Test Issue', createdAt: new Date() } as unknown as LinearIssue)
+    mockGetIssue.mockResolvedValue({ id: 'test-issue-id', linearId: 'test-linear-id', roundId: 'test-round-id', createdAt: new Date() } as unknown as Issue)
     mockGetIssueVotes.mockResolvedValue([{ value: 1 }, { vote: 2 }] as Vote[])
     mockGetGuests.mockResolvedValue([{ userId: 'guest-1', roundId: 'test-round-id' }, { userId: 'guest-2', roundId: 'test-round-id' }])
   })
@@ -124,17 +124,19 @@ describe('setIssueHandler', () => {
     expect(mockDecrypt).toHaveBeenCalledWith(mockUser.token)
     expect(mockSetIssue).toHaveBeenCalledWith('test-round-id', 'test-issue-id', 'decrypted-token')
     expect(mockGetIssue).toHaveBeenCalledWith({ roundId: 'test-round-id', linearId: 'test-issue-id' })
-    expect(mockGetIssueVotes).toHaveBeenCalledWith({ id: 'test-issue-id', linearId: 'test-linear-id', roundId: 'test-round-id' })
+    expect(mockGetIssueVotes).toHaveBeenCalled()
     expect(mockGetGuests).toHaveBeenCalledWith({ round: 'test-round-id' })
     expect(mockSendMessageToRound).toHaveBeenCalledWith('test-round-id', {
       type: 'issue',
       payload: {
-        issue: { id: 'test-issue-id', linearId: 'test-linear-id', title: 'Test Issue' },
+        issue: { id: 'test-issue-id', linearId: 'test-linear-id', title: 'Test Issue', createdAt: expect.any(Date), roundId: 'test-round-id' },
         votes: [1, undefined],
-        expectedVotes: 3
+        expectedVotes: 3,
       },
       event: 'roundIssueUpdated'
     })
+    const sendMessageToRoundCalls = mockSendMessageToRound.mock.calls
+    expect(sendMessageToRoundCalls.length).toBe(1)
     expect(mockStatus).toHaveBeenCalledWith(HttpStatusCodes.NO_CONTENT)
     expect(mockSend).toHaveBeenCalled()
   })

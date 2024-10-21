@@ -1,6 +1,6 @@
 {
   "name": "aces-backend",
-  "version": "1.0.0-alpha.16",
+  "version": "1.0.0-alpha.17",
   "scripts": {
     "build-base": "npx ts-node build.ts",
     "build": "NODE_ENV=production npm run build-base && npm run sentry:sourcemaps && npm run cleanup:sourcemaps",
@@ -40,7 +40,7 @@
     "@prisma/client": "5.17.0",
     "@sentry/cli": "^2.36.5",
     "@sentry/node": "^8.32.0",
-    "@sentry/profiling-node": "^8.25.0",
+    "@sentry/profiling-node": "^8.34.0",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
@@ -50,7 +50,7 @@
     "express": "^4.20.0",
     "express-async-errors": "^3.1.1",
     "express-session": "^1.18.0",
-    "helmet": "^7.1.0",
+    "helmet": "^8.0.0",
     "inserturlparams": "^2.0.4",
     "jsonfile": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
@@ -72,7 +72,7 @@
     "@types/find": "^0.2.4",
     "@types/fs-extra": "^11.0.4",
     "@types/jasmine": "^5.1.4",
-    "@types/jest": "^29.5.12",
+    "@types/jest": "^29.5.13",
     "@types/jsonfile": "^6.1.4",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/morgan": "^1.9.9",
@@ -87,7 +87,7 @@
     "eslint-plugin-node": "^11.1.0",
     "find": "^0.3.0",
     "fs-extra": "^11.2.0",
-    "jasmine": "^5.2.0",
+    "jasmine": "^5.4.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.4",
     "prisma": "^5.20.0",
@@ -95,7 +95,7 @@
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.3"
   },
   "packageManager": "yarn@1.22.22+sha1.ac34549e6aa8e7ead463a7407e1c7390f61a6610"
 }
